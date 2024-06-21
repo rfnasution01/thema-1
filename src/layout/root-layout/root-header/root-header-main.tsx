@@ -54,7 +54,6 @@ export function RootHeaderMain({ color }: { color: string }) {
   return (
     <div
       ref={ref}
-      id="header"
       className={`${bgPrimary500(color)} flex w-full items-center gap-32 px-32 py-16 phones:hidden`}
     >
       {isLoaded ? (

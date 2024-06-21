@@ -23,6 +23,7 @@ export function RootLogo({ identitas }: { identitas: IdentitasType }) {
   return (
     <div
       ref={ref}
+      id="header"
       className="flex h-[20vh] items-center justify-center phones:h-[12vh]"
     >
       {isLoaded ? (
