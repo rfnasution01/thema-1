@@ -62,17 +62,21 @@ export function RootNavigationChildren({
                               ? `/halaman/page/${list?.slug}`
                               : list?.jenis_menu === enumRoute.PROGRAM
                                 ? `/program-details/page/${list?.slug}`
-                                : list?.jenis_menu === enumRoute.BERITA
-                                  ? `/berita/page/${list?.slug}`
-                                  : list?.jenis_menu === enumRoute.AGENDA
-                                    ? `/agenda/page/${list?.slug}`
-                                    : list?.jenis_menu === enumRoute.PENGUMUMAN
-                                      ? `/pengumuman/page/${list?.slug}`
-                                      : list?.jenis_menu === enumRoute.PRESTASI
-                                        ? `/prestasi/page/${list?.slug}`
-                                        : list?.jenis_menu === enumRoute.URL
-                                          ? list?.id_konten
-                                          : list?.slug
+                                : list?.jenis_menu === enumRoute.MADING
+                                  ? `/mading/page/${list?.slug}`
+                                  : list?.jenis_menu === enumRoute.BERITA
+                                    ? `/berita/page/${list?.slug}`
+                                    : list?.jenis_menu === enumRoute.AGENDA
+                                      ? `/agenda/page/${list?.slug}`
+                                      : list?.jenis_menu ===
+                                          enumRoute.PENGUMUMAN
+                                        ? `/pengumuman/page/${list?.slug}`
+                                        : list?.jenis_menu ===
+                                            enumRoute.PRESTASI
+                                          ? `/prestasi/page/${list?.slug}`
+                                          : list?.jenis_menu === enumRoute.URL
+                                            ? list?.id_konten
+                                            : list?.slug
                       }
                       target={
                         list?.jenis_menu === enumRoute.URL ? '_blank' : '_self'

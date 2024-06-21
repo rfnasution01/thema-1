@@ -19,7 +19,7 @@ import {
   TestimonialPage,
 } from './loadables'
 
-const categories = ['berita', 'pengumuman', 'agenda', 'prestasi']
+const categories = ['berita', 'pengumuman', 'agenda', 'prestasi', 'mading']
 
 export const router = createBrowserRouter([
   {

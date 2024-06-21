@@ -7,4 +7,5 @@ export const enumRoute = {
   AGENDA: 'Agenda',
   PENGUMUMAN: 'Pengumuman',
   PRESTASI: 'Prestasi',
+  MADING: 'Mading',
 } as const

@@ -28,15 +28,17 @@ export function RootMobileParent({
                       ? `/program-details`
                       : item?.jenis_menu === enumRoute.BERITA
                         ? `/berita`
-                        : item?.jenis_menu === enumRoute.AGENDA
-                          ? `/agenda`
-                          : item?.jenis_menu === enumRoute.PENGUMUMAN
-                            ? `/pengumuman`
-                            : item?.jenis_menu === enumRoute.PRESTASI
-                              ? `/prestasi`
-                              : item?.jenis_menu === enumRoute.URL
-                                ? item?.id_konten
-                                : item?.slug
+                        : item?.jenis_menu === enumRoute.MADING
+                          ? `/mading`
+                          : item?.jenis_menu === enumRoute.AGENDA
+                            ? `/agenda`
+                            : item?.jenis_menu === enumRoute.PENGUMUMAN
+                              ? `/pengumuman`
+                              : item?.jenis_menu === enumRoute.PRESTASI
+                                ? `/prestasi`
+                                : item?.jenis_menu === enumRoute.URL
+                                  ? item?.id_konten
+                                  : item?.slug
           }
           target={item?.jenis_menu === enumRoute.URL ? '_blank' : '_self'}
           key={idx}
