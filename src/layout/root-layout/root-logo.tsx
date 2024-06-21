@@ -41,12 +41,12 @@ export function RootLogo({ identitas }: { identitas: IdentitasType }) {
             >
               <div className="flex  items-center gap-32 p-32">
                 <img
-                  src="/img/SMA.png"
+                  src={identitas?.logo ?? '/img/SMA.png'}
                   alt={identitas?.nama_website}
                   className={`h-[12vh] rounded-lg object-cover filter phones:h-[9vh]`}
                   loading="lazy"
                 />
-                <div className="flex flex-col gap-12">
+                <div className="flex flex-col gap-12 phones:hidden">
                   <p className="text-[4rem]">{identitas?.nama_website}</p>
                   <p className="text-[2rem] phones:hidden">
                     {identitas?.alamat}
