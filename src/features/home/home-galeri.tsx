@@ -186,7 +186,7 @@ export function HomeGaleri({ color }: { color: string }) {
                                 className="h-[30vh] w-full rounded-2xl"
                               />
                               <div className="flex flex-col items-center justify-center gap-8">
-                                <p className="text-[3rem] font-bold">
+                                <p className="text-center text-[3rem] font-bold">
                                   {item?.judul}
                                 </p>
                               </div>

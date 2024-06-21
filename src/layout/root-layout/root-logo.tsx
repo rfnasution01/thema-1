@@ -27,14 +27,14 @@ export function RootLogo({ identitas }: { identitas: IdentitasType }) {
       className="flex h-[20vh] items-center justify-center phones:h-[12vh]"
     >
       {isLoaded ? (
-        <div className={`relative block`}>
+        <div className={`relative block w-full`}>
           <img
-            src="/img/toba.png"
+            src="/img/bg-logo-large.jpg"
             alt={identitas?.nama_website}
-            className={`h-[20vh] w-full rounded-lg object-cover opacity-45 filter phones:h-[12vh]`}
+            className={`h-[20vh] w-full rounded-lg object-cover filter phones:h-[12vh]`}
             loading="lazy"
           />
-          <div className="absolute top-0 flex h-full w-[100%]">
+          <div className="absolute top-0 flex h-full w-[100%] bg-white bg-opacity-70">
             <Link
               to={`/`}
               className={`relative flex h-full w-full flex-col items-center justify-center border-white`}

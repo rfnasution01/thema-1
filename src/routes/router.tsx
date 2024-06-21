@@ -8,6 +8,7 @@ import {
   HalamanPage,
   HomePage,
   KategoriLayout,
+  OrganizationPage,
   ProfilPage,
   ProgramDetailPage,
   ProgramPage,
@@ -57,6 +58,10 @@ export const router = createBrowserRouter([
       {
         path: 'profil',
         element: <ProfilPage />,
+      },
+      {
+        path: 'organisasi',
+        element: <OrganizationPage />,
       },
       {
         path: 'galeri-detail/page/:id',
