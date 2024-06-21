@@ -12,6 +12,8 @@ import { useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { Link } from 'react-router-dom'
 import { RootNavigationChildren } from './root-navigation-children'
+import { useDispatch } from 'react-redux'
+import { setStateHalaman } from '@/store/reducer/stateIdHalaman'
 
 export function RootNavigationMain({ color }: { color: string }) {
   // --- Menu Utama ---
@@ -61,6 +63,8 @@ export function RootNavigationMain({ color }: { color: string }) {
     return parseInt(a.urutan) - parseInt(b.urutan)
   })
 
+  const dispatch = useDispatch()
+
   return (
     <>
       {sortedData?.length > 0 && (
@@ -82,25 +86,30 @@ export function RootNavigationMain({ color }: { color: string }) {
                             ? '#'
                             : item?.jenis_menu === enumRoute.ROUTE
                               ? item?.slug
-                              : item?.jenis_menu === enumRoute.HALAMAN
+                              : item?.jenis_menu === enumRoute.HALAMAN &&
+                                  item?.id_konten === ''
                                 ? `/halaman`
-                                : item?.jenis_menu === enumRoute.PROGRAM
-                                  ? `/program-details`
-                                  : item?.jenis_menu === enumRoute.BERITA
-                                    ? `/berita`
-                                    : item?.jenis_menu === enumRoute.MADING
-                                      ? `/mading`
-                                      : item?.jenis_menu === enumRoute.AGENDA
-                                        ? `/agenda`
-                                        : item?.jenis_menu ===
-                                            enumRoute.PENGUMUMAN
-                                          ? `/pengumuman`
+                                : item?.jenis_menu === enumRoute.HALAMAN &&
+                                    item?.id_konten !== ''
+                                  ? `/halaman/page/${item?.slug}`
+                                  : item?.jenis_menu === enumRoute.PROGRAM
+                                    ? `/program-details`
+                                    : item?.jenis_menu === enumRoute.BERITA
+                                      ? `/berita`
+                                      : item?.jenis_menu === enumRoute.MADING
+                                        ? `/mading`
+                                        : item?.jenis_menu === enumRoute.AGENDA
+                                          ? `/agenda`
                                           : item?.jenis_menu ===
-                                              enumRoute.PRESTASI
-                                            ? `/prestasi`
-                                            : item?.jenis_menu === enumRoute.URL
-                                              ? item?.id_konten
-                                              : item?.slug
+                                              enumRoute.PENGUMUMAN
+                                            ? `/pengumuman`
+                                            : item?.jenis_menu ===
+                                                enumRoute.PRESTASI
+                                              ? `/prestasi`
+                                              : item?.jenis_menu ===
+                                                  enumRoute.URL
+                                                ? item?.id_konten
+                                                : item?.slug
                       }
                       target={
                         item?.jenis_menu === enumRoute.URL ? '_blank' : '_self'
@@ -108,6 +117,20 @@ export function RootNavigationMain({ color }: { color: string }) {
                       className={`
                 ${isActivePage(item?.slug) ? borderPrimary400(color) : hoverPrimary400(color)} ${item?.children?.length > 0 ? '' : 'px-32 py-24 '} text-[2rem] uppercase hover:cursor-pointer phones:text-[2.4rem]`}
                       key={idx}
+                      onClick={() => {
+                        if (
+                          item?.jenis_menu === enumRoute?.HALAMAN &&
+                          item?.id_parent !== ''
+                        ) {
+                          localStorage.setItem('beritaID', item?.id_konten)
+                          dispatch(
+                            setStateHalaman({
+                              page: item?.slug,
+                              id: item?.id_konten,
+                            }),
+                          )
+                        }
+                      }}
                     >
                       <RootNavigationChildren color={color} item={item} />
                     </Link>
