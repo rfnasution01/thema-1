@@ -1,5 +1,6 @@
 import { convertToSlug } from '@/libs/helpers/format-text'
 import { setStateHalaman } from '@/store/reducer/stateIdHalaman'
+import { ReactNode } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
@@ -8,17 +9,21 @@ export function CardTypeF({
   nama,
   isi,
   id,
+  height = 'h-[25vh]',
+  kelompok,
 }: {
   photo: string
   nama: string
-  isi: string
+  isi: string | ReactNode
   id: string
+  height?: string
+  kelompok?: string
 }) {
   const dispatch = useDispatch()
 
   return (
     <Link
-      to={`/testimonial/page/${convertToSlug(nama)}`}
+      to={`${kelompok ? '' : `/testimonial/page/${convertToSlug(nama)}`}`}
       onClick={() => {
         localStorage.setItem('beritaID', id)
         dispatch(
@@ -30,7 +35,7 @@ export function CardTypeF({
       }}
       className="flex h-full flex-col gap-24 rounded-2xl bg-white px-24 pb-32 pt-24 shadow hover:cursor-pointer hover:shadow-lg"
     >
-      <div className="h-[25vh] w-full">
+      <div className={`${height} w-full`}>
         <img
           src={photo}
           alt={nama}
@@ -38,14 +43,18 @@ export function CardTypeF({
           loading="lazy"
         />
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-32">
         <p className="line-clamp-2 font-roboto text-[2.4rem] phones:text-[2.8rem]">
           {nama ?? '-'}
         </p>
-        <div
-          dangerouslySetInnerHTML={{ __html: isi }}
-          className="article-content line-clamp-3"
-        />
+        {kelompok === 'direktori' ? (
+          <div>{isi}</div>
+        ) : (
+          <div
+            dangerouslySetInnerHTML={{ __html: isi }}
+            className="article-content line-clamp-3"
+          />
+        )}
       </div>
     </Link>
   )
