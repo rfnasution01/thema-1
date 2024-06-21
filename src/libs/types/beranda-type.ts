@@ -52,6 +52,16 @@ export type BerandaType = {
   berita: BeritaType[]
 }
 
+export type FasilitasType = {
+  id: string
+  photo: string
+  nama: string
+  keterangan: string
+  jam_operasional: string
+  alamat: string
+  telepon: string
+}
+
 export type BeritaType = {
   id: string
   seo: string

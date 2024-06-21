@@ -2,6 +2,7 @@ import {
   HomeBanner,
   HomeBannerLayanan,
   HomeCard,
+  HomeFasilitas,
   HomeGaleri,
   HomeLayanan,
   HomeTestimoni,
@@ -31,6 +32,7 @@ export default function HomePage() {
       <HomeBanner color={color} />
       <HomeBannerLayanan color={color} />
       <HomeCard color={color} />
+      <HomeFasilitas color={color} />
       <HomeLayanan color={color} />
       <HomeGaleri color={color} />
       <HomeTestimoni color={color} />

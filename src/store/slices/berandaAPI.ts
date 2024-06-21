@@ -3,6 +3,7 @@ import {
   BeritaDetailType,
   BeritaPopuler,
   BeritaType,
+  FasilitasType,
   HalamanDetailType,
   IdentitasType,
   KategoriType,
@@ -203,6 +204,16 @@ export const BerandaEndpoints = api.injectEndpoints({
         },
       }),
     }),
+    getFasilitas: builder.query<Res<FasilitasType[]>, Params>({
+      query: ({ page_number, page_size }) => ({
+        url: `website/fasilitas`,
+        method: 'GET',
+        params: {
+          page_number: page_number,
+          page_size: page_size,
+        },
+      }),
+    }),
   }),
 })
 
@@ -213,6 +224,7 @@ export const {
   useGetSliderQuery,
   useGetHalamanDetailQuery,
   useGetBerandaQuery,
+  useGetFasilitasQuery,
   useGetProgramQuery,
   useGetProgramDetailQuery,
   useGetBeritaQuery,
