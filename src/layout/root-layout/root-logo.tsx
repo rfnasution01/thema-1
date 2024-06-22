@@ -46,7 +46,7 @@ export function RootLogo({ identitas }: { identitas: IdentitasType }) {
                   className={`h-[12vh] rounded-lg object-cover filter phones:h-[9vh]`}
                   loading="lazy"
                 />
-                <div className="flex flex-col gap-12 phones:hidden">
+                <div className="flex flex-col gap-12">
                   <p className="text-[4rem]">{identitas?.nama_website}</p>
                   <p className="text-[2rem] phones:hidden">
                     {identitas?.alamat}
