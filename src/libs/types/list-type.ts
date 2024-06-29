@@ -20,4 +20,5 @@ export type ListParams = {
   search?: string
   jenis?: string
   seo_kategori?: string
+  id_kategori?: string
 }

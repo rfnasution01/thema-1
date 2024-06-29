@@ -23,6 +23,7 @@ import {
 import Loading from '@/components/Loading'
 import { NoData } from '@/components/NoData'
 import { Pagination } from '@/components/Pagination'
+import { Meta } from '@/store/api'
 
 export default function Direktori() {
   const stateColor = useSelector(getThemeSlice)?.color
@@ -52,6 +53,8 @@ export default function Direktori() {
 
   // --- Direktori ---
   const [direktori, setDirektori] = useState<DirektoriType[]>([])
+  const [header, setHeader] = useState<Meta>()
+
   const {
     data: dataDirektori,
     isFetching: isFetchingDirektori,
@@ -71,6 +74,7 @@ export default function Direktori() {
   useEffect(() => {
     if (dataDirektori?.data) {
       setDirektori(dataDirektori?.data)
+      setHeader(dataDirektori?.meta)
     }
   }, [dataDirektori?.data, user])
 
@@ -90,7 +94,6 @@ export default function Direktori() {
   }, [inView])
 
   const { firstPathname } = usePathname()
-  const lastPage = Math.ceil(direktori?.length / pageNumber)
 
   return (
     <div className="mb-80 mt-32 flex flex-col gap-32">
@@ -106,7 +109,7 @@ export default function Direktori() {
             {/* Titlte  */}
             <div className="flex items-center justify-between gap-32 phones:flex-col phones:items-start">
               <p className="font-roboto text-[5rem]">
-                {convertSlugToText(firstPathname)}
+                {convertSlugToText(firstPathname)} {convertSlugToText(user)}
               </p>
               <Form {...form}>
                 <form className="flex w-1/3 items-center gap-32 phones:w-full">
@@ -155,6 +158,8 @@ export default function Direktori() {
                                 value={item?.status ?? '-'}
                               />
                             </div>
+                          ) : user === 'alumni' ? (
+                            ''
                           ) : (
                             `Kelas: ${item?.kelas}`
                           )
@@ -219,7 +224,7 @@ export default function Direktori() {
           <Pagination
             setPage={setPageNumber}
             pageNow={pageNumber ?? 0}
-            lastPage={lastPage ?? 0}
+            lastPage={header?.last_page ?? 0}
           />
         )}
       </div>

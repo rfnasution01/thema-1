@@ -3,6 +3,7 @@ import {
   ComingSoonPage,
   DetailLayout,
   DirektoriPage,
+  DownloadPage,
   FaqPage,
   GaleriPage,
   HalamanPage,
@@ -54,6 +55,10 @@ export const router = createBrowserRouter([
       {
         path: 'faq',
         element: <FaqPage />,
+      },
+      {
+        path: 'download',
+        element: <DownloadPage />,
       },
       {
         path: 'profil',

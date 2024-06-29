@@ -33,3 +33,4 @@ export const TestimonialDetailPage = loadable(
 export const GaleriPage = loadable(() => import('@/pages/galeri'))
 export const DirektoriPage = loadable(() => import('@/pages/directory'))
 export const OrganizationPage = loadable(() => import('@/pages/organization'))
+export const DownloadPage = loadable(() => import('@/pages/download'))
