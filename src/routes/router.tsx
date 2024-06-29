@@ -19,6 +19,7 @@ import {
   TestimonialDetailPage,
   TestimonialPage,
 } from './loadables'
+import Kontak from '@/pages/kontak'
 
 const categories = ['berita', 'pengumuman', 'agenda', 'prestasi', 'mading']
 
@@ -80,6 +81,10 @@ export const router = createBrowserRouter([
       {
         path: 'testimonial/page/:id',
         element: <TestimonialDetailPage />,
+      },
+      {
+        path: 'kontak',
+        element: <Kontak />,
       },
 
       ...categories.flatMap((category) => [

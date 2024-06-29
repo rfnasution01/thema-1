@@ -188,7 +188,7 @@ export default function DownloadFile() {
                           <Link
                             to={item?.url}
                             target="_blank"
-                            className="flex w-1/2 items-center justify-between gap-32 border-b p-12 phones:w-full"
+                            className="flex w-1/2 items-center justify-between gap-32 border-b phones:w-full"
                             key={idx}
                           >
                             <p className="phones:w-7/12">
