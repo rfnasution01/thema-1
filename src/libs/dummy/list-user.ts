@@ -7,4 +7,8 @@ export const ListUser = [
     value: 'siswa',
     label: 'Siswa',
   },
+  {
+    value: 'alumni',
+    label: 'Alumni',
+  },
 ]
