@@ -20,29 +20,31 @@ export function RootHeaderMapping({
           to={
             item?.nama_menu === 'Home'
               ? '/'
-              : item?.slug === 'merdeka-belajar-kampus-merdeka-mbkm'
+              : item?.slug === 'program-sekolah'
                 ? '#'
-                : item?.jenis_menu === enumRoute.ROUTE
-                  ? item?.slug
-                  : item?.jenis_menu === enumRoute.HALAMAN &&
-                      item?.id_konten === ''
-                    ? `/halaman`
+                : item?.slug === 'akademik'
+                  ? '#'
+                  : item?.jenis_menu === enumRoute.ROUTE
+                    ? item?.slug
                     : item?.jenis_menu === enumRoute.HALAMAN &&
-                        item?.id_konten !== ''
-                      ? `/halaman/page/${item?.slug}`
-                      : item?.jenis_menu === enumRoute.PROGRAM
-                        ? `/program-details`
-                        : item?.jenis_menu === enumRoute.BERITA
-                          ? `/berita`
-                          : item?.jenis_menu === enumRoute.AGENDA
-                            ? `/agenda`
-                            : item?.jenis_menu === enumRoute.PENGUMUMAN
-                              ? `/pengumuman`
-                              : item?.jenis_menu === enumRoute.PRESTASI
-                                ? `/prestasi`
-                                : item?.jenis_menu === enumRoute.URL
-                                  ? item?.id_konten
-                                  : item?.slug
+                        item?.id_konten === ''
+                      ? `/halaman`
+                      : item?.jenis_menu === enumRoute.HALAMAN &&
+                          item?.id_konten !== ''
+                        ? `/halaman/page/${item?.slug}`
+                        : item?.jenis_menu === enumRoute.PROGRAM
+                          ? `/program-details`
+                          : item?.jenis_menu === enumRoute.BERITA
+                            ? `/berita`
+                            : item?.jenis_menu === enumRoute.AGENDA
+                              ? `/agenda`
+                              : item?.jenis_menu === enumRoute.PENGUMUMAN
+                                ? `/pengumuman`
+                                : item?.jenis_menu === enumRoute.PRESTASI
+                                  ? `/prestasi`
+                                  : item?.jenis_menu === enumRoute.URL
+                                    ? item?.id_konten
+                                    : item?.slug
           }
           target={item?.jenis_menu === 'URL' ? '_blank' : '_self'}
           key={idx}

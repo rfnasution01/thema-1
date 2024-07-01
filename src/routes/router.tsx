@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom'
 import {
+  AbsensiPage,
   ComingSoonPage,
   DetailLayout,
   DirektoriPage,
@@ -8,6 +9,7 @@ import {
   GaleriPage,
   HalamanPage,
   HomePage,
+  JadwalBelajarPage,
   KategoriLayout,
   OrganizationPage,
   ProfilPage,
@@ -70,10 +72,17 @@ export const router = createBrowserRouter([
         element: <OrganizationPage />,
       },
       {
+        path: 'daftar-kehadiran',
+        element: <AbsensiPage />,
+      },
+      {
         path: 'galeri-detail/page/:id',
         element: <GaleriPage />,
       },
-
+      {
+        path: 'jadwal-belajar',
+        element: <JadwalBelajarPage />,
+      },
       {
         path: 'testimonial',
         element: <TestimonialPage />,

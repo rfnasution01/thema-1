@@ -35,3 +35,7 @@ export const DirektoriPage = loadable(() => import('@/pages/directory'))
 export const OrganizationPage = loadable(() => import('@/pages/organization'))
 export const DownloadPage = loadable(() => import('@/pages/download'))
 export const KontakPage = loadable(() => import('@/pages/kontak'))
+export const AbsensiPage = loadable(() => import('@/pages/absensi'))
+export const JadwalBelajarPage = loadable(
+  () => import('@/pages/akademik/jadwal-belajar'),
+)
