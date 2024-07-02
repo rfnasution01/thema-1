@@ -16,8 +16,16 @@ import {
   SelectListTahunAkademik,
 } from '@/components/selects-component'
 import { JadwalSchema } from '@/libs/schema/jadwal-schema'
-import { useGetJadwalBelajarQuery } from '@/store/slices/JadwalAPI'
-import { JadwalType } from '@/libs/types/jadwal-type'
+import {
+  useGetJadwalBelajarQuery,
+  useGetNamaKelasQuery,
+  useGetTahunAkademikQuery,
+} from '@/store/slices/JadwalAPI'
+import {
+  JadwalType,
+  NamaKelasType,
+  TahunAkademikType,
+} from '@/libs/types/jadwal-type'
 import { NoData } from '@/components/NoData'
 
 export default function Absensi() {
@@ -34,6 +42,52 @@ export default function Absensi() {
   const [color, setColor] = useState<string>(
     colorParams ?? stateColor ?? baseColor,
   )
+
+  const [listTahunAkademik, setListTahunAkademik] = useState<
+    TahunAkademikType[]
+  >([])
+
+  const {
+    data: dataTA,
+    isSuccess: successTA,
+    isLoading: loadingTA,
+    isFetching: fetchingTA,
+  } = useGetTahunAkademikQuery()
+
+  useEffect(() => {
+    if (!fetchingTA) {
+      if (dataTA?.meta?.page > 1) {
+        setListTahunAkademik((prevData) => [
+          ...prevData,
+          ...(dataTA?.data ?? []),
+        ])
+      } else {
+        setListTahunAkademik([...(dataTA?.data ?? [])])
+      }
+    }
+  }, [dataTA])
+
+  const [listNamaKelas, setListNamaKelas] = useState<NamaKelasType[]>([])
+
+  const {
+    data: dataKelas,
+    isSuccess: successKelas,
+    isLoading: loadingKelas,
+    isFetching: fetchingKelas,
+  } = useGetNamaKelasQuery()
+
+  useEffect(() => {
+    if (!fetchingKelas) {
+      if (dataKelas?.meta?.page > 1) {
+        setListNamaKelas((prevData) => [
+          ...prevData,
+          ...(dataKelas?.data ?? []),
+        ])
+      } else {
+        setListNamaKelas([...(dataKelas?.data ?? [])])
+      }
+    }
+  }, [dataKelas])
 
   const [identitas, setIdentitas] = useState<IdentitasType>()
   const {
@@ -55,6 +109,9 @@ export default function Absensi() {
     defaultValues: {},
   })
 
+  const taAktif = listTahunAkademik?.find((item) => item?.status_aktif === 1)
+  const defaultValueKelas = listNamaKelas?.[0]
+
   const nama_kelas = form.watch('nama_kelas')
   const tahun_akademik = form.watch('tahun_akademik')
   const id_kelas = form.watch('id_kelas')
@@ -66,11 +123,11 @@ export default function Absensi() {
     isFetching: isFetchingJadwal,
   } = useGetJadwalBelajarQuery(
     {
-      id_ta: tahun_akademik ?? '',
-      tingkat_kelas: nama_kelas ?? '',
+      id_ta: tahun_akademik ?? taAktif?.id,
+      tingkat_kelas: nama_kelas ?? defaultValueKelas?.nama_kelas,
       id_kelas: id_kelas ?? '',
     },
-    { skip: !tahun_akademik },
+    { skip: !listTahunAkademik || !taAktif || !defaultValueKelas },
   )
 
   useEffect(() => {
@@ -97,7 +154,7 @@ export default function Absensi() {
                 {identitas?.nama_website}
               </p>
             </div>
-            <div className="flex flex-1 flex-col gap-4">
+            <div className="flex flex-1 flex-col gap-16">
               <p
                 className="font-sans text-[2.8rem]"
                 style={{ fontWeight: 100 }}
@@ -107,29 +164,41 @@ export default function Absensi() {
               </p>
               <Form {...form}>
                 <form className="flex w-full items-center gap-80 text-[2.8rem]">
-                  <div className="flex w-2/3 items-center gap-12 phones:w-full">
-                    <p
-                      className="text-nowrap font-sans"
-                      style={{ fontWeight: 100 }}
-                    >
-                      Tahun Akademik:
-                    </p>
-                    <SelectListTahunAkademik
-                      name="tahun_akademik"
-                      useFormReturn={form}
-                      placeholder="Pilih Tahun Akademik"
-                    />
-                  </div>
-                  <div className="phones:ww-full flex w-1/3 items-center gap-12">
-                    <p className="font-sans" style={{ fontWeight: 100 }}>
-                      Kelas
-                    </p>
-                    <SelectListNamaKelas
-                      name="id_kelas"
-                      useFormReturn={form}
-                      placeholder="Pilih Nama Akademik"
-                    />
-                  </div>
+                  {listTahunAkademik && (
+                    <div className="flex w-2/3 items-center gap-12 phones:w-full">
+                      <p
+                        className="text-nowrap font-sans"
+                        style={{ fontWeight: 100 }}
+                      >
+                        Tahun Akademik:
+                      </p>
+                      <SelectListTahunAkademik
+                        name="tahun_akademik"
+                        useFormReturn={form}
+                        placeholder="Pilih Tahun Akademik"
+                        listTahunAkademik={listTahunAkademik}
+                        isLoading={loadingTA}
+                        isFetching={fetchingTA}
+                        isSuccess={successTA}
+                      />
+                    </div>
+                  )}
+                  {listNamaKelas && (
+                    <div className="phones:ww-full flex w-1/3 items-center gap-12">
+                      <p className="font-sans" style={{ fontWeight: 100 }}>
+                        Kelas
+                      </p>
+                      <SelectListNamaKelas
+                        name="id_kelas"
+                        useFormReturn={form}
+                        placeholder="Pilih Nama"
+                        listNamaKelas={listNamaKelas}
+                        isFetching={fetchingKelas}
+                        isLoading={loadingKelas}
+                        isSuccess={successKelas}
+                      />
+                    </div>
+                  )}
                 </form>
               </Form>
             </div>
