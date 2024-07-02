@@ -6,7 +6,7 @@ export function LabelComponent({
   value: string | number
 }) {
   return (
-    <div className="flex w-full gap-12">
+    <div className="flex gap-12">
       <p className="text-nowrap font-light">{label}:</p>
       <p className="text-nowrap font-bold">{value}</p>
     </div>
