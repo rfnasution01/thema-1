@@ -25,10 +25,13 @@ export const JadwalEndpoints = api.injectEndpoints({
         method: 'GET',
       }),
     }),
-    getNamaKelas: builder.query<Res<NamaKelasType[]>, void>({
-      query: () => ({
+    getNamaKelas: builder.query<Res<NamaKelasType[]>, { id_ta: string }>({
+      query: ({ id_ta }) => ({
         url: `website/nama_kelas`,
         method: 'GET',
+        params: {
+          id_ta: id_ta,
+        },
       }),
     }),
   }),

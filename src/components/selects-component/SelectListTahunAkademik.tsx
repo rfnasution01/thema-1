@@ -164,6 +164,8 @@ export function SelectListTahunAkademik({
                       onInputChange={search}
                       onChange={(optionSelected) => {
                         field.onChange(optionSelected?.value)
+                        useFormReturn.setValue('tingkat_kelas', '')
+                        useFormReturn.setValue('id_kelas', '')
                       }}
                       isDisabled={isDisabled}
                       isLoading={isFetching || isLoading}

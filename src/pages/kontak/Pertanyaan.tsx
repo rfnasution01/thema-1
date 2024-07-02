@@ -11,10 +11,9 @@ import { IdentitasType } from '@/libs/types/beranda-type'
 import { Link } from 'react-router-dom'
 import { IconFacebook, IconGoogle, IconInstagram, IconYoutube } from '@/assets'
 import { UseFormReturn } from 'react-hook-form'
-import { Image, Trash, Upload } from 'lucide-react'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Loader2, Trash, Upload } from 'lucide-react'
+import { Dispatch, SetStateAction, useEffect } from 'react'
 import { Bounce, toast } from 'react-toastify'
-import { useCreateFileMutation } from '@/store/slices/kontakAPI'
 
 export function Pertanyaan({
   identitas,
@@ -24,6 +23,14 @@ export function Pertanyaan({
   isLoadingUpload,
   setUrls,
   handleSubmitTiket,
+  handleUploadFoto,
+  dir,
+  setDir,
+  loadingFile,
+  angka1,
+  angka2,
+  setHasil,
+  hasil,
 }: {
   identitas: IdentitasType
   handleSubmitKontak: () => Promise<void>
@@ -32,34 +39,15 @@ export function Pertanyaan({
   formToken: UseFormReturn
   isLoadingUpload?: boolean
   setUrls: Dispatch<SetStateAction<string[]>>
+  setDir: Dispatch<SetStateAction<string[]>>
+  setHasil: Dispatch<SetStateAction<number>>
+  dir: string[]
+  handleUploadFoto: (file: File) => Promise<void>
+  loadingFile: boolean
+  angka1: number
+  angka2: number
+  hasil: number
 }) {
-  const [uploadFileMutation] = useCreateFileMutation()
-
-  const handleUploadFoto = async (file: File) => {
-    const formatData = new FormData()
-    formatData.append('berkas', file)
-
-    try {
-      const res = await uploadFileMutation(formatData)
-      setDir([...dir, res?.data?.url])
-    } catch (e) {
-      console.error(e)
-      toast.error(`Data gagal disimpan`, {
-        position: 'bottom-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-        transition: Bounce,
-      })
-    }
-  }
-
-  const [dir, setDir] = useState(form.watch('berkas') ?? [])
-
   useEffect(() => {
     if (dir && dir.length > 0) {
       setUrls(dir)
@@ -78,6 +66,11 @@ export function Pertanyaan({
     })
   }
 
+  const handleSliderChange = (event) => {
+    const value = parseInt(event.target.value, 10)
+    setHasil(value)
+  }
+
   return (
     <div className="flex gap-48 phones:flex-col">
       <Form {...form}>
@@ -92,6 +85,7 @@ export function Pertanyaan({
             placeholder="Isi Nama Depan"
             type="text"
             className="w-full"
+            isDisabled={loadingFile}
           />
 
           <FormLabelInput
@@ -101,6 +95,7 @@ export function Pertanyaan({
             placeholder="Isi Nama Belakang"
             type="text"
             className="w-full"
+            isDisabled={loadingFile}
           />
 
           <FormLabelInput
@@ -110,6 +105,7 @@ export function Pertanyaan({
             placeholder="Isi Email"
             type="email"
             className="w-full"
+            isDisabled={loadingFile}
           />
 
           <FormLabelInput
@@ -120,6 +116,7 @@ export function Pertanyaan({
             type="text"
             className="w-full"
             isNumber
+            isDisabled={loadingFile}
           />
 
           <FormLabelInput
@@ -129,6 +126,7 @@ export function Pertanyaan({
             placeholder="Isi Pesan"
             type="text"
             className="w-full"
+            isDisabled={loadingFile}
           />
 
           <FormField
@@ -139,12 +137,12 @@ export function Pertanyaan({
                 <FormControl>
                   <div>
                     <Input
-                      className="absolute -z-[1] h-[0.1px] w-[0.1px] overflow-hidden opacity-0"
+                      className="-z-[1] h-[0.1px] w-[0.1px] overflow-hidden opacity-0"
                       {...field}
                       id="berkas"
                       type="file"
                       value={''}
-                      disabled={isLoadingUpload}
+                      disabled={isLoadingUpload || loadingFile}
                       placeholder="Lampiran"
                       onChange={(e) => {
                         if (e.target.files[0].size > 5 * 1000000) {
@@ -171,40 +169,45 @@ export function Pertanyaan({
                     />
                     <div className="flex gap-32 phones:flex-col">
                       <label
-                        className="flex w-1/2 flex-col items-center gap-24 rounded-lg border-2 border-dashed border-primary p-48 text-primary hover:cursor-pointer phones:w-full"
+                        className="flex items-center gap-12"
                         htmlFor="berkas"
                       >
-                        <span>
-                          <Upload size={32} />
-                        </span>
-                        Unggah File
+                        Berkas
+                        <div className="rounded-2xl bg-[#1B2F69] p-12 text-white hover:cursor-pointer hover:bg-opacity-80">
+                          {loadingFile ? (
+                            <span className="animate-spin duration-300">
+                              <Loader2 size={16} />
+                            </span>
+                          ) : (
+                            <Upload size={16} />
+                          )}
+                        </div>
                       </label>
 
-                      <div className="flex w-1/2 flex-col whitespace-nowrap phones:w-full">
+                      <div className="flex w-full flex-wrap items-start gap-32 whitespace-nowrap phones:w-full">
                         {dir && dir.length > 0 ? (
                           dir?.map((name, idx) => (
                             <div
-                              className="flex items-center justify-between gap-16 p-8 hover:cursor-pointer hover:text-primary"
+                              className="relative flex w-1/4 flex-col items-center gap-4"
                               key={idx}
                             >
-                              <Link
-                                to={name}
-                                className="flex w-full flex-1 items-center gap-12"
-                                target="_blank"
-                              >
-                                <Image size={16} />
-                                <p className="line-clamp-1 overflow-hidden">
-                                  {name}
-                                </p>
-                              </Link>
-                              <Trash
-                                size={15}
-                                className="hover:cursor-pointer"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  handleRemoveItem(idx)
-                                }}
-                              />
+                              <div className="relative w-full">
+                                <img
+                                  src={name}
+                                  alt="Gambar"
+                                  className="h-[10rem] w-full rounded-2xl object-cover filter"
+                                  loading="lazy"
+                                />
+                                <span className="absolute right-2 top-2 rounded-lg bg-danger-700 p-4 text-white hover:cursor-pointer hover:bg-danger">
+                                  <Trash
+                                    size={15}
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      handleRemoveItem(idx)
+                                    }}
+                                  />
+                                </span>
+                              </div>
                             </div>
                           ))
                         ) : (
@@ -218,6 +221,26 @@ export function Pertanyaan({
               </FormItem>
             )}
           />
+
+          <div className="flex">
+            <div className="flex flex-col justify-center gap-12 rounded-2xl border bg-background p-32 shadow-md">
+              <p>Geser untuk menjawab pertanyaan</p>
+              <p>
+                {angka1} + {angka2} = {hasil}
+              </p>
+              <input
+                id="slider2"
+                type="range"
+                min="1"
+                max="20"
+                defaultValue={0}
+                value={hasil}
+                onChange={handleSliderChange}
+                className="w-full hover:cursor-pointer"
+              />
+            </div>
+          </div>
+
           <div className="flex">
             <button
               type="submit"

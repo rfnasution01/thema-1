@@ -63,28 +63,6 @@ export default function Absensi() {
     }
   }, [dataTA])
 
-  const [listNamaKelas, setListNamaKelas] = useState<NamaKelasType[]>([])
-
-  const {
-    data: dataKelas,
-    isSuccess: successKelas,
-    isLoading: loadingKelas,
-    isFetching: fetchingKelas,
-  } = useGetNamaKelasQuery()
-
-  useEffect(() => {
-    if (!fetchingKelas) {
-      if (dataKelas?.meta?.page > 1) {
-        setListNamaKelas((prevData) => [
-          ...prevData,
-          ...(dataKelas?.data ?? []),
-        ])
-      } else {
-        setListNamaKelas([...(dataKelas?.data ?? [])])
-      }
-    }
-  }, [dataKelas])
-
   const [identitas, setIdentitas] = useState<IdentitasType>()
   const {
     data: identitasData,
@@ -106,11 +84,35 @@ export default function Absensi() {
   })
 
   const taAktif = listTahunAkademik?.find((item) => item?.status_aktif === 1)
-  const defaultValueKelas = listNamaKelas?.[0]
 
   const nama_kelas = form.watch('nama_kelas')
   const tahun_akademik = form.watch('tahun_akademik')
   const id_kelas = form.watch('id_kelas')
+
+  const [listNamaKelas, setListNamaKelas] = useState<NamaKelasType[]>([])
+  const {
+    data: dataKelas,
+    isSuccess: successKelas,
+    isLoading: loadingKelas,
+    isFetching: fetchingKelas,
+  } = useGetNamaKelasQuery({
+    id_ta: tahun_akademik,
+  })
+
+  useEffect(() => {
+    if (!fetchingKelas) {
+      if (dataKelas?.meta?.page > 1) {
+        setListNamaKelas((prevData) => [
+          ...prevData,
+          ...(dataKelas?.data ?? []),
+        ])
+      } else {
+        setListNamaKelas([...(dataKelas?.data ?? [])])
+      }
+    }
+  }, [dataKelas])
+
+  const defaultValueKelas = listNamaKelas?.[0]
 
   const [jadwal, setJadwal] = useState<JadwalType[]>([])
   const {
