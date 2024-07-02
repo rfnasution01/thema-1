@@ -45,6 +45,28 @@ export function SelectListNamaKelas({
     }
   }, [data])
 
+  function groupByTingkatKelas(data) {
+    // Create a map to store grouped data
+    const groupedData = {}
+
+    // Iterate over each item in the data array
+    data.forEach((item) => {
+      const { tingkat_kelas } = item
+
+      // If the tingkat_kelas does not exist in the map, create an entry for it
+      if (!groupedData[tingkat_kelas]) {
+        groupedData[tingkat_kelas] = {
+          value: tingkat_kelas, // You can generate an ID here if needed
+          label: tingkat_kelas,
+          tingkat: tingkat_kelas,
+        }
+      }
+    })
+
+    // Convert the map to an array
+    return Object.values(groupedData)
+  }
+
   let NamaKelasOption = []
   if (isSuccess) {
     NamaKelasOption = listNamaKelas.map((item) => {
@@ -54,7 +76,17 @@ export function SelectListNamaKelas({
         tingkat: item?.tingkat_kelas,
       }
     })
+    const groupedData = groupByTingkatKelas(listNamaKelas)
+    NamaKelasOption = NamaKelasOption.concat(groupedData)
   }
+
+  NamaKelasOption.sort((a, b) => {
+    const nameA = a.label || a.nama_kelas
+    const nameB = b.label || b.nama_kelas
+    if (nameA < nameB) return -1
+    if (nameA > nameB) return 1
+    return 0
+  })
 
   const search = (newValue: string) => {
     if (newValue != query) {
@@ -66,9 +98,7 @@ export function SelectListNamaKelas({
     return (
       <components.Option {...props}>
         <div ref={props.innerRef}>
-          <div className="text-[2rem]">
-            {props?.data?.semester} {props.label}
-          </div>
+          <div className="text-[2rem]">{props.label}</div>
         </div>
       </components.Option>
     )
@@ -156,7 +186,11 @@ export function SelectListNamaKelas({
                   placeholder={placeholder ?? 'Pilih'}
                   onInputChange={search}
                   onChange={(optionSelected) => {
-                    field.onChange(optionSelected?.value)
+                    if (!isNaN(Number(optionSelected?.value))) {
+                      useFormReturn.setValue('id_kelas', '')
+                    } else {
+                      field.onChange(optionSelected?.value)
+                    }
                     useFormReturn.setValue(
                       'nama_kelas',
                       optionSelected?.tingkat,

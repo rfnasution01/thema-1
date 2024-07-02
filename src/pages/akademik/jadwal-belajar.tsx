@@ -83,7 +83,7 @@ export default function Absensi() {
 
   return (
     <div className="scrollbar flex h-screen w-full flex-col overflow-y-auto bg-white phones:bg-background">
-      {loadingIdentitas || loadingJadwal ? (
+      {loadingIdentitas ? (
         <Loading />
       ) : (
         <>
@@ -106,8 +106,8 @@ export default function Absensi() {
                 <span className="font-bold">{identitas?.nama_website}</span>
               </p>
               <Form {...form}>
-                <form className="flex items-center justify-between gap-12 text-[2.8rem]">
-                  <div className="flex items-center gap-12">
+                <form className="flex w-full items-center gap-80 text-[2.8rem]">
+                  <div className="flex w-2/3 items-center gap-12 phones:w-full">
                     <p
                       className="text-nowrap font-sans"
                       style={{ fontWeight: 100 }}
@@ -120,7 +120,7 @@ export default function Absensi() {
                       placeholder="Pilih Tahun Akademik"
                     />
                   </div>
-                  <div className="flex items-center gap-12">
+                  <div className="phones:ww-full flex w-1/3 items-center gap-12">
                     <p className="font-sans" style={{ fontWeight: 100 }}>
                       Kelas
                     </p>
@@ -136,7 +136,13 @@ export default function Absensi() {
           </div>
 
           <div className="scrollbar flex flex-1 flex-col overflow-y-auto px-[20rem] py-32">
-            {jadwal?.length === 0 ? <NoData /> : <TableJadwal data={jadwal} />}
+            {loadingJadwal ? (
+              <Loading />
+            ) : jadwal?.length === 0 ? (
+              <NoData />
+            ) : (
+              <TableJadwal data={jadwal} />
+            )}
           </div>
         </>
       )}
