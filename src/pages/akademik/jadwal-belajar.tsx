@@ -9,12 +9,7 @@ import Loading from '@/components/Loading'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
-import { Form } from '@/components/Form'
 import { TableJadwal } from './table-jadwal'
-import {
-  SelectListNamaKelas,
-  SelectListTahunAkademik,
-} from '@/components/selects-component'
 import { JadwalSchema } from '@/libs/schema/jadwal-schema'
 import {
   useGetJadwalBelajarQuery,
@@ -26,7 +21,6 @@ import {
   NamaKelasType,
   TahunAkademikType,
 } from '@/libs/types/jadwal-type'
-import { NoData } from '@/components/NoData'
 import { useInView } from 'react-intersection-observer'
 import { SingleSkeleton } from '@/components/skeleton-component'
 
@@ -173,13 +167,7 @@ export default function Absensi() {
               </div>
             ) : (
               <>
-                <div className="flex items-center gap-16">
-                  <img src={identitas?.logo} alt="Logo" className="w-[8rem]" />
-                  <p className="font-sans text-[2.4rem]">
-                    {identitas?.nama_website}
-                  </p>
-                </div>
-                <div className="flex flex-1 flex-col gap-16">
+                <div className="flex flex-1 flex-col items-center gap-16">
                   <p
                     className="font-sans text-[2.8rem]"
                     style={{ fontWeight: 100 }}
@@ -187,58 +175,25 @@ export default function Absensi() {
                     Jadwal Pelajaran{' '}
                     <span className="font-bold">{identitas?.nama_website}</span>
                   </p>
-                  <Form {...form}>
-                    <form className="flex w-full items-center gap-80 text-[2.8rem]">
-                      {listTahunAkademik && (
-                        <div className="flex w-2/3 items-center gap-12 phones:w-full">
-                          <p
-                            className="text-nowrap font-sans"
-                            style={{ fontWeight: 100 }}
-                          >
-                            Tahun Akademik:
-                          </p>
-                          <SelectListTahunAkademik
-                            name="tahun_akademik"
-                            useFormReturn={form}
-                            placeholder="Pilih Tahun Akademik"
-                            listTahunAkademik={listTahunAkademik}
-                            isLoading={loadingTA}
-                            isFetching={fetchingTA}
-                            isSuccess={successTA}
-                          />
-                        </div>
-                      )}
-                      {listNamaKelas && (
-                        <div className="phones:ww-full flex w-1/3 items-center gap-12">
-                          <p className="font-sans" style={{ fontWeight: 100 }}>
-                            Kelas
-                          </p>
-                          <SelectListNamaKelas
-                            name="id_kelas"
-                            useFormReturn={form}
-                            placeholder="Pilih Nama"
-                            listNamaKelas={listNamaKelas}
-                            isFetching={fetchingKelas}
-                            isLoading={loadingKelas}
-                            isSuccess={successKelas}
-                          />
-                        </div>
-                      )}
-                    </form>
-                  </Form>
                 </div>
               </>
             )}
           </div>
 
-          <div className="scrollbar flex flex-1 flex-col overflow-y-auto px-[20rem] py-32">
-            {loadingJadwal ? (
-              <Loading />
-            ) : jadwal?.length === 0 ? (
-              <NoData />
-            ) : (
-              <TableJadwal data={jadwal} />
-            )}
+          <div className="scrollbar flex h-full flex-1 flex-col overflow-auto px-32 pb-32 pt-12">
+            <TableJadwal
+              data={jadwal}
+              listNamaKelas={listNamaKelas}
+              listTahunAkademik={listTahunAkademik}
+              successKelas={successKelas}
+              successTA={successTA}
+              loadingKelas={loadingKelas}
+              loadingTA={loadingTA}
+              fetchingKelas={fetchingKelas}
+              fetchingTA={fetchingTA}
+              form={form}
+              loadingJadwal={loadingJadwal}
+            />
           </div>
         </>
       )}

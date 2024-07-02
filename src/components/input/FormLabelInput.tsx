@@ -16,6 +16,7 @@ export function FormLabelInput({
   className,
   isDisabled,
   defaultValue,
+  isNumber,
 }: {
   form: UseFormReturn | undefined | any
   label?: string | ReactNode
@@ -28,6 +29,7 @@ export function FormLabelInput({
   className?: string
   isDisabled?: boolean
   defaultValue?: string
+  isNumber?: boolean
 }) {
   return (
     <FormField
@@ -35,9 +37,9 @@ export function FormLabelInput({
       name={name}
       render={({ field }) => (
         <FormItem
-          className={`flex w-full flex-col gap-y-8 rounded-full text-[2rem] text-black ${className}`}
+          className={`flex w-full flex-col gap-y-8 ${label ? 'gap-y-8' : 'gap-y-0'} rounded-full text-[2rem] text-black ${className}`}
         >
-          <FormLabel>{label}</FormLabel>
+          {label && <FormLabel>{label}</FormLabel>}
           <Input
             {...field}
             className="rounded-xl bg-white"
@@ -49,6 +51,16 @@ export function FormLabelInput({
             suffix={suffix}
             handlerClick={handlerClick}
             disabled={isDisabled}
+            onInput={(e) => {
+              if (isNumber && type === 'text') {
+                const inputValue = (e.target as HTMLInputElement).value
+                ;(e.target as HTMLInputElement).value = inputValue.replace(
+                  /[^\d]/g,
+                  '',
+                )
+                field.onChange((e.target as HTMLInputElement).value)
+              }
+            }}
           />
           <FormMessage />
         </FormItem>

@@ -1,8 +1,22 @@
+import { Form } from '@/components/Form'
+import Loading from '@/components/Loading'
+import { NoData } from '@/components/NoData'
+import {
+  SelectListNamaKelas,
+  SelectListTahunAkademik,
+} from '@/components/selects-component'
 import { SingleSkeleton } from '@/components/skeleton-component'
-import { JadwalType } from '@/libs/types/jadwal-type'
+import {
+  JadwalType,
+  NamaKelasType,
+  TahunAkademikType,
+} from '@/libs/types/jadwal-type'
 import clsx from 'clsx'
+import { ChevronLeft } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { UseFormReturn } from 'react-hook-form'
 import { useInView } from 'react-intersection-observer'
+import { Link } from 'react-router-dom'
 
 type ConvertJadwal = {
   namaKelas: string
@@ -16,10 +30,33 @@ type DataJadwal = {
   kamis: JadwalType
   jumat: JadwalType
   sabtu: JadwalType
-  minggu: JadwalType
 }
 
-export function TableJadwal({ data }: { data: JadwalType[] }) {
+export function TableJadwal({
+  data,
+  form,
+  successTA,
+  fetchingTA,
+  loadingTA,
+  listTahunAkademik,
+  listNamaKelas,
+  loadingKelas,
+  successKelas,
+  fetchingKelas,
+  loadingJadwal,
+}: {
+  data: JadwalType[]
+  form: UseFormReturn
+  listTahunAkademik: TahunAkademikType[]
+  loadingTA: boolean
+  successTA: boolean
+  fetchingTA: boolean
+  listNamaKelas: NamaKelasType[]
+  loadingKelas: boolean
+  successKelas: boolean
+  fetchingKelas: boolean
+  loadingJadwal: boolean
+}) {
   // Mendapatkan daftar nama kelas yang unik dari data jadwal
   const uniqueClasses = Array.from(new Set(data.map((item) => item.nama_kelas)))
 
@@ -40,7 +77,6 @@ export function TableJadwal({ data }: { data: JadwalType[] }) {
       Kamis: data?.filter((item) => item?.nama_hari.includes('Kamis')),
       Jumat: data?.filter((item) => item?.nama_hari.includes('Jumat')),
       Sabtu: data?.filter((item) => item?.nama_hari.includes('Sabtu')),
-      Minggu: data?.filter((item) => item?.nama_hari.includes('Minggu')),
     }
 
     const mostFrequentDay = Object.keys(hariData).reduce((a, b) =>
@@ -78,7 +114,6 @@ export function TableJadwal({ data }: { data: JadwalType[] }) {
           kamis: hariData.Kamis[i] || null,
           jumat: hariData.Jumat[i] || null,
           sabtu: hariData.Sabtu[i] || null,
-          minggu: hariData.Minggu[i] || null,
         })
       }
 
@@ -90,15 +125,7 @@ export function TableJadwal({ data }: { data: JadwalType[] }) {
     return Object.values(groupedData)
   }
 
-  const daysOfWeek = [
-    'Senin',
-    'Selasa',
-    'Rabu',
-    'Kamis',
-    'Jumat',
-    'Sabtu',
-    'Minggu',
-  ]
+  const daysOfWeek = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']
 
   const [isLoaded, setIsLoaded] = useState(false)
   const { ref, inView } = useInView({
@@ -116,16 +143,68 @@ export function TableJadwal({ data }: { data: JadwalType[] }) {
   }, [inView])
 
   return (
-    <div ref={ref} className="flex flex-col gap-32">
+    <div ref={ref} className="flex h-full flex-col gap-12">
+      <Form {...form}>
+        <form className="flex w-full items-center justify-between text-[2.8rem]">
+          <Link to={'/'} className="flex items-center gap-12 text-danger">
+            <ChevronLeft size={20} />
+            <p className="text-[2.4rem]">Kembali ke Home</p>
+          </Link>
+          <div className="flex w-1/3 items-center gap-80">
+            {listTahunAkademik && (
+              <div className="flex w-2/3 items-center gap-12 phones:w-full">
+                <p
+                  className="text-nowrap font-sans"
+                  style={{ fontWeight: 100 }}
+                >
+                  Tahun Akademik:
+                </p>
+                <SelectListTahunAkademik
+                  name="tahun_akademik"
+                  useFormReturn={form}
+                  placeholder="Pilih Tahun Akademik"
+                  listTahunAkademik={listTahunAkademik}
+                  isLoading={loadingTA}
+                  isFetching={fetchingTA}
+                  isSuccess={successTA}
+                />
+              </div>
+            )}
+            {listNamaKelas && (
+              <div className="flex w-1/3 items-center gap-12 phones:w-full">
+                <p className="font-sans" style={{ fontWeight: 100 }}>
+                  Kelas
+                </p>
+                <SelectListNamaKelas
+                  name="id_kelas"
+                  useFormReturn={form}
+                  placeholder="Pilih Nama"
+                  listNamaKelas={listNamaKelas}
+                  isFetching={fetchingKelas}
+                  isLoading={loadingKelas}
+                  isSuccess={successKelas}
+                />
+              </div>
+            )}
+          </div>
+        </form>
+      </Form>
       {!isLoaded ? (
         <SingleSkeleton height="h-[50rem]" />
+      ) : loadingJadwal ? (
+        <Loading />
+      ) : data?.length === 0 ? (
+        <NoData />
       ) : (
         groupByTingkatKelas(data)?.map((item, idx) => (
-          <div className="flex flex-col gap-12" key={idx}>
+          <div
+            className="scrollbar flex h-full flex-1 flex-col gap-12 overflow-y-auto"
+            key={idx}
+          >
             <p className="font-sans text-[2.4rem] font-bold">
               {item?.namaKelas}
             </p>
-            <table className="rounded-3x scrollbar h-full w-full flex-1 border-collapse overflow-auto bg-[#fcfcfc] text-[2rem]">
+            <table className="rounded-3x h-full w-full flex-1 border-collapse bg-[#fcfcfc] text-[2rem]">
               <thead className="border border-black align-top text-[2rem] leading-medium">
                 <tr>
                   {daysOfWeek.map((day, idx) => (
@@ -219,16 +298,6 @@ export function TableJadwal({ data }: { data: JadwalType[] }) {
                           {list?.sabtu?.jam_akhir?.substring(0, 5)}
                         </p>
                         <p>{list?.sabtu?.nama_guru}</p>
-                      </div>
-                    </td>
-                    <td className="px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
-                      <div key={id} className="text-center">
-                        <p className="font-bold">{list?.minggu?.nama_mapel}</p>
-                        <p>
-                          {list?.minggu?.jam_mulai?.substring(0, 5)} -{' '}
-                          {list?.minggu?.jam_akhir?.substring(0, 5)}
-                        </p>
-                        <p>{list?.minggu?.nama_guru}</p>
                       </div>
                     </td>
                   </tr>

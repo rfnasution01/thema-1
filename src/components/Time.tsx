@@ -18,5 +18,5 @@ export default function Time() {
     minute: '2-digit',
   })
 
-  return <p>{formattedTime}</p>
+  return <p className="text-nowrap">{formattedTime}</p>
 }

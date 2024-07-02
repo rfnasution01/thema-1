@@ -12,8 +12,22 @@ import { useGetIdentitasQuery } from '@/store/slices/berandaAPI'
 import 'leaflet/dist/leaflet.css'
 import { Peta } from './Peta'
 import { Pertanyaan } from './Pertanyaan'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as zod from 'zod'
+import { InputToken, KontakSchema } from '@/libs/schema/kontak-schema'
+import { Bounce, ToastContainer, toast } from 'react-toastify'
+import {
+  useCreateKontakMutation,
+  useLazyGetKodeQuery,
+} from '@/store/slices/kontakAPI'
+import 'react-toastify/dist/ReactToastify.css'
+import { ModalKode } from '@/components/modal-component/modal-kode'
 
 export default function Kontak() {
+  const [urls, setUrls] = useState<string[]>([])
+  const [kode, setKode] = useState<string>('')
+  const [isShow, setIsShow] = useState<boolean>(false)
   const stateColor = useSelector(getThemeSlice)?.color
 
   useEffect(() => {
@@ -63,6 +77,132 @@ export default function Kontak() {
 
   const { firstPathname } = usePathname()
 
+  const form = useForm<zod.infer<typeof KontakSchema>>({
+    resolver: zodResolver(KontakSchema),
+    defaultValues: {},
+  })
+
+  const formToken = useForm<zod.infer<typeof InputToken>>({
+    resolver: zodResolver(InputToken),
+    defaultValues: {},
+  })
+
+  // --- Create Upload ---
+  const [
+    createUpload,
+    {
+      isError: isErrorUpload,
+      error: errorUpload,
+      isLoading: isLoadingUpload,
+      isSuccess: isSuccessUpload,
+    },
+  ] = useCreateKontakMutation()
+
+  const handleSubmit = async () => {
+    const values = form.getValues()
+
+    const body = {
+      nama_depan: values?.nama_depan,
+      nama_belakang: values?.nama_belakang,
+      email: values.email,
+      hp: values?.email,
+      pesan: values?.pesan,
+      berkas: urls,
+    }
+    try {
+      const res = await createUpload({ body: body })
+      setKode(res?.data?.data)
+    } catch (error) {
+      console.error('Gagal mengunggah file:', error)
+    }
+  }
+
+  useEffect(() => {
+    if (isSuccessUpload) {
+      toast.success('Pesan berhasil dikirim!', {
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+        transition: Bounce,
+      })
+      form.reset()
+      setUrls([])
+      setIsShow(true)
+      //   window.location.reload()
+    }
+  }, [isSuccessUpload])
+
+  useEffect(() => {
+    if (isErrorUpload) {
+      const errorMsg = errorUpload as { data?: { message?: string } }
+
+      toast.error(`${errorMsg?.data?.message ?? 'Terjadi Kesalahan'}`, {
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+        transition: Bounce,
+      })
+    }
+  }, [isErrorUpload, errorUpload])
+
+  const [handleSubmitToken, { isSuccess, isError, error }] =
+    useLazyGetKodeQuery()
+
+  const handleTokenSubmit = async () => {
+    const values = formToken.getValues()
+
+    try {
+      await handleSubmitToken({ kode_tiket: values?.token })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success('Berhasil buka percakapan!', {
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+        transition: Bounce,
+      })
+      form.reset()
+    }
+  }, [isSuccess])
+
+  useEffect(() => {
+    if (isError) {
+      const errorMsg = error as { data?: { message?: string } }
+
+      toast.error(`${errorMsg?.data?.message ?? 'Terjadi Kesalahan'}`, {
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+        transition: Bounce,
+      })
+    }
+  }, [isError, error])
+
   return (
     <div className="mb-80 mt-32 flex flex-col gap-32">
       <Breadcrumb color={color} />
@@ -86,7 +226,15 @@ export default function Kontak() {
             ) : (
               <div className="flex w-full flex-col gap-32 phones:flex-col">
                 <Peta identitas={Identitass} />
-                <Pertanyaan identitas={Identitass} />
+                <Pertanyaan
+                  identitas={Identitass}
+                  form={form}
+                  formToken={formToken}
+                  handleSubmitKontak={handleSubmit}
+                  setUrls={setUrls}
+                  isLoadingUpload={isLoadingUpload}
+                  handleSubmitTiket={handleTokenSubmit}
+                />
               </div>
             )}
           </div>
@@ -94,6 +242,10 @@ export default function Kontak() {
           <SingleSkeleton height="h-[30vh]" />
         )}
       </div>
+      {kode !== '' && (
+        <ModalKode kode={kode} isOpen={isShow} setIsOpen={setIsShow} />
+      )}
+      <ToastContainer />
     </div>
   )
 }

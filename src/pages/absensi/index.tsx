@@ -9,11 +9,9 @@ import { LabelComponent } from './LabelComponent'
 import { IdentitasType } from '@/libs/types/beranda-type'
 import { useGetIdentitasQuery } from '@/store/slices/berandaAPI'
 import Loading from '@/components/Loading'
-import { FormLabelInput } from '@/components/input'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
-import { Form } from '@/components/Form'
 import { NoData } from '@/components/NoData'
 import { AbsensiType } from '@/libs/types/absensi-tyoe'
 import { useGetAbsensiQuery } from '@/store/slices/absensiAPI'
@@ -110,13 +108,7 @@ export default function Absensi() {
               </div>
             ) : (
               <>
-                <div className="flex items-center gap-16">
-                  <img src={identitas?.logo} alt="Logo" className="w-[8rem]" />
-                  <p className="font-sans text-[2.4rem]">
-                    {identitas?.nama_website}
-                  </p>
-                </div>
-                <div className="flex flex-1 flex-col gap-4">
+                <div className="flex flex-1 flex-col items-center justify-center gap-4">
                   <p
                     className="font-sans text-[2.8rem]"
                     style={{ fontWeight: 100 }}
@@ -124,23 +116,6 @@ export default function Absensi() {
                     Daftar Kehadiran Pegawai{' '}
                     <span className="font-bold">{identitas?.nama_website}</span>
                   </p>
-                  <Form {...form}>
-                    <form className="flex items-center gap-12">
-                      <p
-                        className="font-sans text-[2.8rem]"
-                        style={{ fontWeight: 100 }}
-                      >
-                        Hari/Tanggal:
-                      </p>
-                      <FormLabelInput
-                        className="w-1/4"
-                        name="tanggal"
-                        type="date"
-                        form={form}
-                        defaultValue={newvalue}
-                      />
-                    </form>
-                  </Form>
                 </div>
               </>
             )}
@@ -203,39 +178,42 @@ export default function Absensi() {
                   <NoData />
                 </div>
               ) : (
-                <div className="flex h-full flex-1 flex-col gap-32 overflow-y-hidden  px-[20rem] py-32">
-                  <div className="scrollbar flex h-full flex-1 flex-col overflow-auto">
-                    <TableAbsensi item={absensi?.presensi} />
-                  </div>
-                  <p className="text-center text-[2.4rem] text-[#1C1C1C]">
-                    Diberitahukan kepada seluruh ASN, Tenaga Kerja, dan Pegawai
-                    yang melakukan absensi online melalui handphone agar memfoto
-                    wajah dengan{' '}
-                    <span className="font-bold text-danger">
-                      jelas tanpa penggunakan helm dan masker.
-                    </span>
-                  </p>
+                <div className="scrollbar flex h-full flex-1 flex-col gap-32 overflow-y-auto px-[20rem] pb-32 pt-12">
+                  <TableAbsensi
+                    item={absensi?.presensi}
+                    newvalue={newvalue}
+                    form={form}
+                  />
                 </div>
               )}
             </>
           )}
           <div
-            className={`${bgPrimary700(color)} flex items-center justify-between gap-32 px-[20rem] py-32 text-[2rem] phones:text-[2.4rem]`}
+            className={`${bgPrimary700(color)} flex items-center justify-between gap-32 px-32 py-32 text-[2rem] phones:text-[2.4rem]`}
           >
             {!isLoaded ? (
-              <div className="flex w-full items-center justify-between ">
+              <div className="flex w-full items-center">
                 <SingleSkeleton width="w-[20%]" height="h-[3rem]" />
                 <SingleSkeleton width="w-[20%]" height="h-[3rem]" />
               </div>
             ) : (
               <>
                 <div className="flex flex-col items-center justify-center gap-12">
-                  <p>Pukul</p>
                   <Time />
                 </div>
+                <div className="flex items-center gap-32 overflow-hidden">
+                  <p className="animate-marquee text-nowrap text-center text-[2.4rem] text-white">
+                    Diberitahukan kepada seluruh ASN, Tenaga Kerja, dan Pegawai
+                    yang melakukan absensi online melalui handphone agar memfoto
+                    wajah dengan{' '}
+                    <span className="font-bold">
+                      jelas tanpa penggunakan helm dan masker.
+                    </span>
+                  </p>
+                </div>
+
                 <div className="flex flex-col items-center justify-center gap-12">
-                  <p>Hari & Tanggal</p>
-                  <p>
+                  <p className="text-nowrap">
                     {dayjs(tanggal).locale('id').format('dddd, DD/MM/YYYY')}
                   </p>
                 </div>

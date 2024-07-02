@@ -144,3 +144,7 @@
 .article-content strong {
   font-weight: bold;
 }
+
+.animate-marquee-up:hover {
+  animation-play-state: paused;
+}
