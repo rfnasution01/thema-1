@@ -192,7 +192,10 @@ export default function Kontak() {
     const values = formToken.getValues()
 
     try {
-      await handleSubmitToken({ kode_tiket: values?.token })
+      const res = await handleSubmitToken({ kode_tiket: values?.token })
+      console.log({ res })
+
+      localStorage.setItem('tiketData', JSON.stringify(res?.data))
     } catch (error) {
       console.error(error)
     }
