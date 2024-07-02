@@ -1,5 +1,8 @@
+import { SingleSkeleton } from '@/components/skeleton-component'
 import { JadwalType } from '@/libs/types/jadwal-type'
 import clsx from 'clsx'
+import { useEffect, useState } from 'react'
+import { useInView } from 'react-intersection-observer'
 
 type ConvertJadwal = {
   namaKelas: string
@@ -97,123 +100,144 @@ export function TableJadwal({ data }: { data: JadwalType[] }) {
     'Minggu',
   ]
 
+  const [isLoaded, setIsLoaded] = useState(false)
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  })
+
+  useEffect(() => {
+    if (inView) {
+      // Simulate data fetching
+      setTimeout(() => {
+        setIsLoaded(true)
+      }, 1000) // Adjust the delay as needed
+    }
+  }, [inView])
+
   return (
-    <div className="flex flex-col gap-32">
-      {groupByTingkatKelas(data)?.map((item, idx) => (
-        <div className="flex flex-col gap-12" key={idx}>
-          <p className="font-sans text-[2.4rem] font-bold">{item?.namaKelas}</p>
-          <table className="rounded-3x scrollbar h-full w-full flex-1 border-collapse overflow-auto bg-[#fcfcfc] text-[2rem]">
-            <thead className="border border-black align-top text-[2rem] leading-medium">
-              <tr>
-                {daysOfWeek.map((day, idx) => (
-                  <th
-                    key={idx}
-                    style={{ width: `calc(100% / ${daysOfWeek.length})` }}
-                    className={`border-r ${idx === daysOfWeek?.length - 1 ? 'border-l border-black' : ''} bg-[#1835B3] px-24 py-16 text-center align-middle text-white`}
-                  >
-                    {day}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="border border-black">
-              {item?.data?.map((list, id) => (
-                <tr
-                  key={id}
-                  className={clsx(
-                    'transition-all ease-in hover:cursor-pointer',
-                    {
-                      'bg-[#CFDBFB]': id % 8 === 0,
-                      'bg-[#DAF8CE]': id % 8 === 1,
-                      'bg-[#FFF2CC]': id % 8 === 2,
-                      'bg-[#CBF5FC]': id % 8 === 3,
-                      'bg-[#FDE0D1]': id % 8 === 4,
-                      'bg-[#FFFFB0]': id % 8 === 5,
-                      'bg-[#FFD0FF]': id % 8 === 6,
-                      'bg-[#D9FFFF]': id % 8 === 7,
-                    },
-                  )}
-                >
-                  <td
+    <div ref={ref} className="flex flex-col gap-32">
+      {!isLoaded ? (
+        <SingleSkeleton height="h-[50rem]" />
+      ) : (
+        groupByTingkatKelas(data)?.map((item, idx) => (
+          <div className="flex flex-col gap-12" key={idx}>
+            <p className="font-sans text-[2.4rem] font-bold">
+              {item?.namaKelas}
+            </p>
+            <table className="rounded-3x scrollbar h-full w-full flex-1 border-collapse overflow-auto bg-[#fcfcfc] text-[2rem]">
+              <thead className="border border-black align-top text-[2rem] leading-medium">
+                <tr>
+                  {daysOfWeek.map((day, idx) => (
+                    <th
+                      key={idx}
+                      style={{ width: `calc(100% / ${daysOfWeek.length})` }}
+                      className={`border-r ${idx === daysOfWeek?.length - 1 ? 'border-l border-black' : ''} bg-[#1835B3] px-24 py-16 text-center align-middle text-white`}
+                    >
+                      {day}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="border border-black">
+                {item?.data?.map((list, id) => (
+                  <tr
+                    key={id}
                     className={clsx(
-                      'px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium',
+                      'transition-all ease-in hover:cursor-pointer',
+                      {
+                        'bg-[#CFDBFB]': id % 8 === 0,
+                        'bg-[#DAF8CE]': id % 8 === 1,
+                        'bg-[#FFF2CC]': id % 8 === 2,
+                        'bg-[#CBF5FC]': id % 8 === 3,
+                        'bg-[#FDE0D1]': id % 8 === 4,
+                        'bg-[#FFFFB0]': id % 8 === 5,
+                        'bg-[#FFD0FF]': id % 8 === 6,
+                        'bg-[#D9FFFF]': id % 8 === 7,
+                      },
                     )}
                   >
-                    <div key={id} className="text-center">
-                      <p className="font-bold">{list?.senin?.nama_mapel}</p>
-                      <p>
-                        {list?.senin?.jam_mulai?.substring(0, 5)} -{' '}
-                        {list?.senin?.jam_akhir?.substring(0, 5)}
-                      </p>
-                      <p>{list?.senin?.nama_guru}</p>
-                    </div>
-                  </td>
-                  <td className="px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
-                    <div key={id} className="text-center">
-                      <p className="font-bold">{list?.selasa?.nama_mapel}</p>
-                      <p>
-                        {list?.selasa?.jam_mulai?.substring(0, 5)} -{' '}
-                        {list?.selasa?.jam_akhir?.substring(0, 5)}
-                      </p>
-                      <p>{list?.selasa?.nama_guru}</p>
-                    </div>
-                  </td>
-                  <td className="px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
-                    <div key={id} className="text-center">
-                      <p className="font-bold">{list?.rabu?.nama_mapel}</p>
-                      <p>
-                        {list?.rabu?.jam_mulai?.substring(0, 5)} -{' '}
-                        {list?.rabu?.jam_akhir?.substring(0, 5)}
-                      </p>
-                      <p>{list?.rabu?.nama_guru}</p>
-                    </div>
-                  </td>
-                  <td className="px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
-                    <div key={id} className="text-center">
-                      <p className="font-bold">{list?.kamis?.nama_mapel}</p>
-                      <p>
-                        {list?.kamis?.jam_mulai?.substring(0, 5)} -{' '}
-                        {list?.kamis?.jam_akhir?.substring(0, 5)}
-                      </p>
-                      <p>{list?.kamis?.nama_guru}</p>
-                    </div>
-                  </td>
-                  <td className="px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
-                    <div key={id} className="text-center">
-                      <p className="font-bold">{list?.jumat?.nama_mapel}</p>
-                      <p>
-                        {list?.jumat?.jam_mulai?.substring(0, 5)} -{' '}
-                        {list?.jumat?.jam_akhir?.substring(0, 5)}
-                      </p>
-                      <p>{list?.jumat?.nama_guru}</p>
-                    </div>
-                  </td>
-                  <td className="px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
-                    <div key={id} className="text-center">
-                      <p className="font-bold">{list?.sabtu?.nama_mapel}</p>
-                      <p>
-                        {list?.sabtu?.jam_mulai?.substring(0, 5)} -{' '}
-                        {list?.sabtu?.jam_akhir?.substring(0, 5)}
-                      </p>
-                      <p>{list?.sabtu?.nama_guru}</p>
-                    </div>
-                  </td>
-                  <td className="px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
-                    <div key={id} className="text-center">
-                      <p className="font-bold">{list?.minggu?.nama_mapel}</p>
-                      <p>
-                        {list?.minggu?.jam_mulai?.substring(0, 5)} -{' '}
-                        {list?.minggu?.jam_akhir?.substring(0, 5)}
-                      </p>
-                      <p>{list?.minggu?.nama_guru}</p>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ))}
+                    <td
+                      className={clsx(
+                        'px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium',
+                      )}
+                    >
+                      <div key={id} className="text-center">
+                        <p className="font-bold">{list?.senin?.nama_mapel}</p>
+                        <p>
+                          {list?.senin?.jam_mulai?.substring(0, 5)} -{' '}
+                          {list?.senin?.jam_akhir?.substring(0, 5)}
+                        </p>
+                        <p>{list?.senin?.nama_guru}</p>
+                      </div>
+                    </td>
+                    <td className="px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
+                      <div key={id} className="text-center">
+                        <p className="font-bold">{list?.selasa?.nama_mapel}</p>
+                        <p>
+                          {list?.selasa?.jam_mulai?.substring(0, 5)} -{' '}
+                          {list?.selasa?.jam_akhir?.substring(0, 5)}
+                        </p>
+                        <p>{list?.selasa?.nama_guru}</p>
+                      </div>
+                    </td>
+                    <td className="px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
+                      <div key={id} className="text-center">
+                        <p className="font-bold">{list?.rabu?.nama_mapel}</p>
+                        <p>
+                          {list?.rabu?.jam_mulai?.substring(0, 5)} -{' '}
+                          {list?.rabu?.jam_akhir?.substring(0, 5)}
+                        </p>
+                        <p>{list?.rabu?.nama_guru}</p>
+                      </div>
+                    </td>
+                    <td className="px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
+                      <div key={id} className="text-center">
+                        <p className="font-bold">{list?.kamis?.nama_mapel}</p>
+                        <p>
+                          {list?.kamis?.jam_mulai?.substring(0, 5)} -{' '}
+                          {list?.kamis?.jam_akhir?.substring(0, 5)}
+                        </p>
+                        <p>{list?.kamis?.nama_guru}</p>
+                      </div>
+                    </td>
+                    <td className="px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
+                      <div key={id} className="text-center">
+                        <p className="font-bold">{list?.jumat?.nama_mapel}</p>
+                        <p>
+                          {list?.jumat?.jam_mulai?.substring(0, 5)} -{' '}
+                          {list?.jumat?.jam_akhir?.substring(0, 5)}
+                        </p>
+                        <p>{list?.jumat?.nama_guru}</p>
+                      </div>
+                    </td>
+                    <td className="px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
+                      <div key={id} className="text-center">
+                        <p className="font-bold">{list?.sabtu?.nama_mapel}</p>
+                        <p>
+                          {list?.sabtu?.jam_mulai?.substring(0, 5)} -{' '}
+                          {list?.sabtu?.jam_akhir?.substring(0, 5)}
+                        </p>
+                        <p>{list?.sabtu?.nama_guru}</p>
+                      </div>
+                    </td>
+                    <td className="px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
+                      <div key={id} className="text-center">
+                        <p className="font-bold">{list?.minggu?.nama_mapel}</p>
+                        <p>
+                          {list?.minggu?.jam_mulai?.substring(0, 5)} -{' '}
+                          {list?.minggu?.jam_akhir?.substring(0, 5)}
+                        </p>
+                        <p>{list?.minggu?.nama_guru}</p>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))
+      )}
     </div>
   )
 }

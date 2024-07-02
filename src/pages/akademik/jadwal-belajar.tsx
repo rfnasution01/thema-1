@@ -27,6 +27,8 @@ import {
   TahunAkademikType,
 } from '@/libs/types/jadwal-type'
 import { NoData } from '@/components/NoData'
+import { useInView } from 'react-intersection-observer'
+import { SingleSkeleton } from '@/components/skeleton-component'
 
 export default function Absensi() {
   const stateColor = useSelector(getThemeSlice)?.color
@@ -138,6 +140,21 @@ export default function Absensi() {
 
   const loadingJadwal = isLoadingJadwal || isFetchingJadwal
 
+  const [isLoaded, setIsLoaded] = useState(false)
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  })
+
+  useEffect(() => {
+    if (inView) {
+      // Simulate data fetching
+      setTimeout(() => {
+        setIsLoaded(true)
+      }, 1000) // Adjust the delay as needed
+    }
+  }, [inView])
+
   return (
     <div className="scrollbar flex h-screen w-full flex-col overflow-y-auto bg-white phones:bg-background">
       {loadingIdentitas ? (
@@ -146,62 +163,72 @@ export default function Absensi() {
         <>
           {/* --- Header --- */}
           <div
+            ref={ref}
             className={`${bgPrimary500(color)} flex items-center justify-center gap-32 px-[40rem] py-32 text-[5rem]`}
           >
-            <div className="flex items-center gap-16">
-              <img src={identitas?.logo} alt="Logo" className="w-[8rem]" />
-              <p className="font-sans text-[2.4rem]">
-                {identitas?.nama_website}
-              </p>
-            </div>
-            <div className="flex flex-1 flex-col gap-16">
-              <p
-                className="font-sans text-[2.8rem]"
-                style={{ fontWeight: 100 }}
-              >
-                Jadwal Pelajaran{' '}
-                <span className="font-bold">{identitas?.nama_website}</span>
-              </p>
-              <Form {...form}>
-                <form className="flex w-full items-center gap-80 text-[2.8rem]">
-                  {listTahunAkademik && (
-                    <div className="flex w-2/3 items-center gap-12 phones:w-full">
-                      <p
-                        className="text-nowrap font-sans"
-                        style={{ fontWeight: 100 }}
-                      >
-                        Tahun Akademik:
-                      </p>
-                      <SelectListTahunAkademik
-                        name="tahun_akademik"
-                        useFormReturn={form}
-                        placeholder="Pilih Tahun Akademik"
-                        listTahunAkademik={listTahunAkademik}
-                        isLoading={loadingTA}
-                        isFetching={fetchingTA}
-                        isSuccess={successTA}
-                      />
-                    </div>
-                  )}
-                  {listNamaKelas && (
-                    <div className="phones:ww-full flex w-1/3 items-center gap-12">
-                      <p className="font-sans" style={{ fontWeight: 100 }}>
-                        Kelas
-                      </p>
-                      <SelectListNamaKelas
-                        name="id_kelas"
-                        useFormReturn={form}
-                        placeholder="Pilih Nama"
-                        listNamaKelas={listNamaKelas}
-                        isFetching={fetchingKelas}
-                        isLoading={loadingKelas}
-                        isSuccess={successKelas}
-                      />
-                    </div>
-                  )}
-                </form>
-              </Form>
-            </div>
+            {!isLoaded ? (
+              <div className="flex w-full items-center gap-32">
+                <SingleSkeleton width="w-[30%]" height="h-[4rem]" />
+                <SingleSkeleton width="w-[70%]" height="h-[6rem]" />
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-16">
+                  <img src={identitas?.logo} alt="Logo" className="w-[8rem]" />
+                  <p className="font-sans text-[2.4rem]">
+                    {identitas?.nama_website}
+                  </p>
+                </div>
+                <div className="flex flex-1 flex-col gap-16">
+                  <p
+                    className="font-sans text-[2.8rem]"
+                    style={{ fontWeight: 100 }}
+                  >
+                    Jadwal Pelajaran{' '}
+                    <span className="font-bold">{identitas?.nama_website}</span>
+                  </p>
+                  <Form {...form}>
+                    <form className="flex w-full items-center gap-80 text-[2.8rem]">
+                      {listTahunAkademik && (
+                        <div className="flex w-2/3 items-center gap-12 phones:w-full">
+                          <p
+                            className="text-nowrap font-sans"
+                            style={{ fontWeight: 100 }}
+                          >
+                            Tahun Akademik:
+                          </p>
+                          <SelectListTahunAkademik
+                            name="tahun_akademik"
+                            useFormReturn={form}
+                            placeholder="Pilih Tahun Akademik"
+                            listTahunAkademik={listTahunAkademik}
+                            isLoading={loadingTA}
+                            isFetching={fetchingTA}
+                            isSuccess={successTA}
+                          />
+                        </div>
+                      )}
+                      {listNamaKelas && (
+                        <div className="phones:ww-full flex w-1/3 items-center gap-12">
+                          <p className="font-sans" style={{ fontWeight: 100 }}>
+                            Kelas
+                          </p>
+                          <SelectListNamaKelas
+                            name="id_kelas"
+                            useFormReturn={form}
+                            placeholder="Pilih Nama"
+                            listNamaKelas={listNamaKelas}
+                            isFetching={fetchingKelas}
+                            isLoading={loadingKelas}
+                            isSuccess={successKelas}
+                          />
+                        </div>
+                      )}
+                    </form>
+                  </Form>
+                </div>
+              </>
+            )}
           </div>
 
           <div className="scrollbar flex flex-1 flex-col overflow-y-auto px-[20rem] py-32">
