@@ -76,7 +76,7 @@ export function Pertanyaan({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmitKontak)}
-          className="flex w-3/5 flex-col gap-32 rounded-3xl border p-32 shadow-md phones:w-full"
+          className="flex w-3/5 flex-col gap-32 rounded-3xl border p-32 shadow-md phones:w-full phones:bg-white"
         >
           <FormLabelInput
             form={form}
@@ -251,9 +251,9 @@ export function Pertanyaan({
           </div>
         </form>
       </Form>
-      <div className="flex w-2/5 flex-col gap-80">
+      <div className="flex w-2/5 flex-col gap-80 phones:w-full">
         {/* --- Group Alamat --- */}
-        <div className="flex w-2/3 flex-col gap-32">
+        <div className="flex w-2/3 flex-col gap-32 phones:w-full">
           {/* --- Alamat --- */}
           <div className="flex flex-col gap-32">
             <p className="border-b border-black pb-8 text-[2.4rem] font-bold">
@@ -313,7 +313,7 @@ export function Pertanyaan({
           </div>
         </div>
         {/* --- Group Token --- */}
-        <div className="flex w-2/3 flex-col gap-32">
+        <div className="flex w-2/3 flex-col gap-32 phones:w-full">
           {/* --- Alamat --- */}
           <div className="flex flex-col gap-32">
             <p className="border-b border-black pb-8 text-[2.4rem] font-bold">
