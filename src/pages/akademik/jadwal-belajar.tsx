@@ -96,7 +96,7 @@ export default function Absensi() {
     isLoading: loadingKelas,
     isFetching: fetchingKelas,
   } = useGetNamaKelasQuery({
-    id_ta: tahun_akademik,
+    id_ta: tahun_akademik ?? taAktif?.id,
   })
 
   useEffect(() => {
@@ -110,7 +110,7 @@ export default function Absensi() {
         setListNamaKelas([...(dataKelas?.data ?? [])])
       }
     }
-  }, [dataKelas])
+  }, [dataKelas, tahun_akademik])
 
   const defaultValueKelas = listNamaKelas?.[0]
 
@@ -160,7 +160,7 @@ export default function Absensi() {
           {/* --- Header --- */}
           <div
             ref={ref}
-            className={`${bgPrimary500(color)} flex items-center justify-center gap-32 px-[40rem] py-32 text-[5rem]`}
+            className={`${bgPrimary500(color)} flex items-center justify-center gap-32 px-[40rem] py-32 text-center text-[5rem] phones:p-32`}
           >
             {!isLoaded ? (
               <div className="flex w-full items-center gap-32">
@@ -182,7 +182,7 @@ export default function Absensi() {
             )}
           </div>
 
-          <div className="scrollbar flex h-full flex-1 flex-col overflow-auto px-32 pb-32 pt-12">
+          <div className="scrollbar flex h-full flex-1 flex-col overflow-auto px-32 pb-32 pt-12 phones:pt-32">
             <TableJadwal
               data={jadwal}
               listNamaKelas={listNamaKelas}

@@ -143,18 +143,18 @@ export function TableJadwal({
   }, [inView])
 
   return (
-    <div ref={ref} className="flex h-full flex-col gap-12">
+    <div ref={ref} className="flex h-full flex-col gap-12 phones:gap-32">
       <Form {...form}>
-        <form className="flex w-full items-center justify-between text-[2.8rem]">
+        <form className="flex w-full items-center justify-between text-[2.8rem] phones:flex-col phones:items-start phones:gap-24">
           <Link to={'/'} className="flex items-center gap-12 text-danger">
             <ChevronLeft size={20} />
             <p className="text-[2.4rem]">Kembali ke Home</p>
           </Link>
-          <div className="flex w-1/3 items-center gap-80">
+          <div className="flex w-1/3 items-center gap-80 phones:w-full phones:flex-col phones:gap-12">
             {listTahunAkademik && (
               <div className="flex w-2/3 items-center gap-12 phones:w-full">
                 <p
-                  className="text-nowrap font-sans"
+                  className="text-nowrap font-sans phones:w-1/2"
                   style={{ fontWeight: 100 }}
                 >
                   Tahun Akademik:
@@ -167,12 +167,16 @@ export function TableJadwal({
                   isLoading={loadingTA}
                   isFetching={fetchingTA}
                   isSuccess={successTA}
+                  className="phones:w-1/2"
                 />
               </div>
             )}
             {listNamaKelas && (
               <div className="flex w-1/3 items-center gap-12 phones:w-full">
-                <p className="font-sans" style={{ fontWeight: 100 }}>
+                <p
+                  className="font-sans phones:w-1/2"
+                  style={{ fontWeight: 100 }}
+                >
                   Kelas
                 </p>
                 <SelectListNamaKelas
@@ -183,6 +187,7 @@ export function TableJadwal({
                   isFetching={fetchingKelas}
                   isLoading={loadingKelas}
                   isSuccess={successKelas}
+                  className="phones:w-1/2"
                 />
               </div>
             )}
