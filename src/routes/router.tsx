@@ -20,6 +20,7 @@ import {
   TentangKamiPage,
   TestimonialDetailPage,
   TestimonialPage,
+  TiketPage,
 } from './loadables'
 import Kontak from '@/pages/kontak'
 
@@ -78,6 +79,10 @@ export const router = createBrowserRouter([
       {
         path: 'galeri-detail/page/:id',
         element: <GaleriPage />,
+      },
+      {
+        path: 'tiket',
+        element: <TiketPage />,
       },
       {
         path: 'jadwal-belajar',

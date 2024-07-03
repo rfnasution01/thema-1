@@ -9,7 +9,7 @@ export type KontakParams = {
 
 export type DataTiketType = {
   ticket: TiketType
-  chat: []
+  chat: ChatType[]
 }
 
 export type TiketType = {
@@ -32,4 +32,14 @@ export type LampiranType = {
   id_kontak: string
   dokumen: string
   create_at: string
+}
+
+export type ChatType = {
+  id: string
+  jenis_chat: string
+  isi: string
+  baca: string
+  lampiran: LampiranType[]
+  user: string
+  tanggal: string
 }

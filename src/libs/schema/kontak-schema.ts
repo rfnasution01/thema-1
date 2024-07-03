@@ -34,3 +34,17 @@ export const InputToken = zod.object({
     invalid_type_error: 'Format token tidak valid',
   }),
 })
+
+export const ChatSchema = zod.object({
+  id: zod.string().nullable().nullish().optional(),
+
+  isi: zod.string({
+    required_error: 'Pesan harus di isi',
+    invalid_type_error: 'Format pesan tidak valid',
+  }),
+  berkas: zod
+    .array(zod.string().optional().nullable().nullish())
+    .optional()
+    .nullable()
+    .nullish(),
+})

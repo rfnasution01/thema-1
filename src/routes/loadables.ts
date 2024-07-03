@@ -39,3 +39,4 @@ export const AbsensiPage = loadable(() => import('@/pages/absensi'))
 export const JadwalBelajarPage = loadable(
   () => import('@/pages/akademik/jadwal-belajar'),
 )
+export const TiketPage = loadable(() => import('@/pages/tiket'))

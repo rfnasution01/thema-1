@@ -130,7 +130,7 @@ export default function Kontak() {
         const res = await createUpload({ body: body })
         setKode(res?.data?.data)
       } catch (error) {
-        console.error('Gagal mengunggah file:', error)
+        console.error(error)
       }
     } else {
       toast.error(`Jawaban salah!`, {
@@ -193,9 +193,15 @@ export default function Kontak() {
 
     try {
       const res = await handleSubmitToken({ kode_tiket: values?.token })
-      console.log({ res })
+      console.log(res)
 
-      localStorage.setItem('tiketData', JSON.stringify(res?.data))
+      if (res?.isSuccess) {
+        localStorage.setItem(
+          'tiketData',
+          res?.data?.data ? JSON.stringify(res?.data?.data) : '',
+        )
+        localStorage.setItem('tiketID', values?.token)
+      }
     } catch (error) {
       console.error(error)
     }
@@ -243,6 +249,7 @@ export default function Kontak() {
 
   const [dir, setDir] = useState(form.watch('berkas') ?? [])
 
+  // --- Upload File ---
   const [
     uploadFileMutation,
     {
@@ -289,7 +296,6 @@ export default function Kontak() {
         theme: 'light',
         transition: Bounce,
       })
-      form.reset()
     }
   }, [successFile])
 

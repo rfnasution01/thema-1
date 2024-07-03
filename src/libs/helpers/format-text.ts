@@ -38,3 +38,12 @@ export function URLEncode(str) {
     return '%' + c.charCodeAt(0).toString(16)
   })
 }
+
+export function getInitials(name) {
+  const initials = name
+    ?.split(' ')
+    ?.map((word) => word.charAt(0))
+    ?.join('')
+    ?.toUpperCase()
+  return initials
+}

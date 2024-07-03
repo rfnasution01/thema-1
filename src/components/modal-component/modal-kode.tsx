@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
-import { Dialog, DialogContent } from '../Dialog'
+import { Dialog, DialogContent, DialogTitle } from '../Dialog'
 import { IconSuccess } from '@/assets'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -23,12 +23,10 @@ export function ModalKode({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTitle className="hidden"></DialogTitle>
       <DialogContent
         className="text-dark scrollbar flex flex-col overflow-y-auto bg-white text-black"
         position="middle"
-        style={{
-          width: '30%',
-        }}
       >
         <div className="flex flex-col gap-16 bg-[#D9F9D1] p-32">
           <div className="flex flex-col items-center justify-center gap-32 text-[2.8rem] text-black">
