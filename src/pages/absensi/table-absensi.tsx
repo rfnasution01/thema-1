@@ -41,17 +41,20 @@ export function TableAbsensi({
       style={{ scrollbarGutter: 'stable' }}
     >
       <Form {...form}>
-        <form className="flex items-center justify-between gap-12">
+        <form className="flex items-center justify-between gap-12 phones:flex-col phones:items-start phones:gap-24">
           <Link to={'/'} className="flex items-center gap-12 text-danger">
             <ChevronLeft size={20} />
             <p className="text-[2.4rem]">Kembali ke Home</p>
           </Link>
-          <div className="flex items-center gap-12">
-            <p className="text-[2.4rem] font-bold" style={{ fontWeight: 100 }}>
+          <div className="flex items-center gap-12 phones:w-full">
+            <p
+              className="text-[2.4rem] font-bold phones:w-1/2"
+              style={{ fontWeight: 100 }}
+            >
               Hari/Tanggal:
             </p>
             <FormLabelInput
-              className="w-full"
+              className="w-full phones:w-1/2"
               name="tanggal"
               type="date"
               form={form}
@@ -87,7 +90,7 @@ export function TableAbsensi({
                 </th>
               </tr>
             </thead>
-            <tbody className="animate-marquee-up h-full">
+            <tbody className="h-full animate-marquee-up">
               {item?.map((list, idx) => (
                 <tr
                   key={idx}

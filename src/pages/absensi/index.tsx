@@ -99,7 +99,7 @@ export default function Absensi() {
       ) : (
         <div className="flex h-full flex-col" ref={ref}>
           <div
-            className={`${bgPrimary500(color)} flex items-center justify-center gap-32 px-[40rem] py-32 text-[5rem]`}
+            className={`${bgPrimary500(color)} flex items-center justify-center gap-32 px-[40rem] py-32 text-center text-[5rem] phones:p-32`}
           >
             {!isLoaded ? (
               <div className="flex w-full items-center gap-32">
@@ -125,7 +125,7 @@ export default function Absensi() {
           ) : (
             <>
               <div
-                className={`${bgPrimary700(color)} flex flex-wrap items-center justify-center gap-32 px-[20rem] py-32 text-[2rem]`}
+                className={`${bgPrimary700(color)} flex flex-wrap items-center justify-center gap-32 px-[20rem] py-32 text-[2rem] phones:gap-x-16 phones:gap-y-12 phones:p-32`}
               >
                 {!isLoaded ? (
                   <div className="flex h-[3rem] w-full items-center gap-32">
@@ -178,7 +178,7 @@ export default function Absensi() {
                   <NoData />
                 </div>
               ) : (
-                <div className="scrollbar flex h-full flex-1 flex-col gap-32 overflow-y-auto px-[20rem] pb-32 pt-12">
+                <div className="scrollbar flex h-full flex-1 flex-col gap-32 overflow-y-auto px-[20rem] pb-32 pt-12 phones:p-32">
                   <TableAbsensi
                     item={absensi?.presensi}
                     newvalue={newvalue}
