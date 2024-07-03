@@ -252,7 +252,7 @@ export default {
           '100%': { transform: 'translateX(-100%)' },
         },
         'marquee-up': {
-          '0%': { transform: 'translateY(`0%)' },
+          '0%': { transform: 'translateY(0%)' },
           '100%': { transform: 'translateY(-100%)' },
         },
       },

@@ -1,73 +1,94 @@
-import { Form } from '@/components/Form'
-import { FormLabelInput } from '@/components/input'
+import { NoData } from '@/components/NoData'
+import { getInitials } from '@/libs/helpers/format-text'
 import { DataTiketType } from '@/libs/types/kontak-type'
+import dayjs from 'dayjs'
 import { UseFormReturn } from 'react-hook-form'
+import { Link } from 'react-router-dom'
+import { FormFindTiket } from './FormFindTiket'
 
 export function DetailTiket({
-  data,
   form,
-  handleTokenSubmit,
+  data,
+  handleSubmitFindTiket,
 }: {
-  data: DataTiketType
   form: UseFormReturn
-  handleTokenSubmit: () => Promise<void>
+  data: DataTiketType
+  handleSubmitFindTiket: () => Promise<void>
 }) {
-  return (
-    <div className="flex h-full w-1/3 flex-col gap-48 border-r border-black p-32 phones:w-full phones:border-b phones:border-r-0">
-      {data && (
-        <>
-          <div className="flex flex-col gap-12 font-bold">
-            <p className="text-[2.4rem]">Subjek Pesan:</p>
-            <p>{data?.ticket?.pesan}</p>
-          </div>
-          <div className="flex flex-col gap-12 font-bold">
-            <p className="text-[2.4rem]">Status:</p>
+  const nama = `${data?.ticket?.nama_depan} ${data?.ticket?.nama_belakang}`
 
-            <div className="flex text-white">
+  return (
+    <div className="flex flex-col gap-64">
+      <FormFindTiket
+        form={form}
+        handleSubmitFindTiket={handleSubmitFindTiket}
+      />
+      {/* --- Detail --- */}
+      {data ? (
+        <div className="flex gap-32">
+          <div className="flex h-[7rem] w-[7rem] items-center justify-center rounded-full bg-primary text-white">
+            {getInitials(nama)}
+          </div>
+          <div className="flex flex-1 flex-col gap-32">
+            <div className="flex h-full gap-32">
+              <div className="flex flex-1 flex-col gap-8">
+                <p className="font-roboto text-[2.8rem]">{nama}</p>
+                <p>
+                  {dayjs(data?.ticket?.tanggal)
+                    .locale('id')
+                    .format('DD MMMM YYYY HH:mm')}
+                </p>
+              </div>
+
               {data?.ticket?.status === 0 ? (
-                <p className="rounded-2xl bg-orange-700 p-16 px-24 py-12 text-[1.8rem]">
-                  Menunggu
-                </p>
+                <div className="">
+                  <p className="rounded-full bg-yellow-700 px-24 py-12 text-[1.8rem] text-yellow-100">
+                    Menugggu
+                  </p>
+                </div>
               ) : data?.ticket?.status === 1 ? (
-                <p className="rounded-2xl bg-green-700 px-24 py-12 text-[1.8rem]">
-                  Diproses
-                </p>
-              ) : data?.ticket?.status === 2 ? (
-                <p className="rounded-2xl bg-danger px-24 py-12 text-[1.8rem]">
-                  Ditutup
-                </p>
+                <div className="">
+                  <p className="rounded-full bg-green-700 px-24 py-12 text-[1.8rem] text-green-100">
+                    Diproses
+                  </p>
+                </div>
               ) : (
-                ''
+                <div className="">
+                  <p className="rounded-full bg-rose-700 px-24 py-12 text-[1.8rem] text-rose-100">
+                    Ditutup
+                  </p>
+                </div>
               )}
             </div>
+            <p>
+              Kode:{' '}
+              <span className="font-bold">{data?.ticket?.kode_tiket}</span>
+            </p>
+            <p>{data?.ticket?.pesan}</p>
+            {data?.ticket?.lampiran?.length > 0 && (
+              <div className="flex flex-col gap-24">
+                <p className="border-b pb-8">
+                  {data?.ticket?.lampiran?.length} Attachment
+                </p>
+                <div className="flex flex-wrap gap-32">
+                  {data?.ticket?.lampiran?.map((item, idx) => (
+                    <Link to={item?.dokumen} target="_blank" key={idx}>
+                      <img
+                        alt={item?.id}
+                        src={item?.dokumen}
+                        className="h-[9rem] w-[13rem] rounded-2xl object-cover filter hover:scale-105"
+                        loading="lazy"
+                      />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-        </>
+        </div>
+      ) : (
+        <NoData />
       )}
-      <div className="flex flex-col gap-32">
-        <p style={{ lineHeight: '130%' }}>
-          Untuk membuka percakapan anda yang lain, masukkan kode tiket anda
-        </p>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleTokenSubmit)}
-            className="flex  gap-24"
-          >
-            <FormLabelInput
-              form={form}
-              name="token"
-              placeholder="Masukkan Kode Tiket"
-              type="text"
-              className="w-full"
-            />
-            <button
-              type="submit"
-              className="rounded-2xl bg-[#1B2F69] px-32 py-16 text-white hover:bg-opacity-80"
-            >
-              Buka
-            </button>
-          </form>
-        </Form>
-      </div>
     </div>
   )
 }
