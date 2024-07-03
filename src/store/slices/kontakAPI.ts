@@ -47,13 +47,14 @@ export const KontakEndpoints = api.injectEndpoints({
       }),
       providesTags: ['chat'],
     }),
-    findKode: builder.mutation<Res<DataTiketType>, { kode_tiket: string }>({
-      query: ({ kode_tiket }) => ({
+    findKode: builder.mutation<
+      Res<DataTiketType>,
+      { body: { kode_tiket: string } }
+    >({
+      query: ({ body }) => ({
         url: 'website/tiket',
         method: 'POST',
-        params: {
-          kode_tiket: kode_tiket,
-        },
+        body: body,
       }),
       invalidatesTags: ['chat'],
     }),

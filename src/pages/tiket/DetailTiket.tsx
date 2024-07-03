@@ -26,7 +26,7 @@ export function DetailTiket({
             <div className="flex text-white">
               {data?.ticket?.status === 0 ? (
                 <p className="rounded-2xl bg-orange-700 p-16 px-24 py-12 text-[1.8rem]">
-                  'Menunggu'
+                  Menunggu
                 </p>
               ) : data?.ticket?.status === 1 ? (
                 <p className="rounded-2xl bg-green-700 px-24 py-12 text-[1.8rem]">

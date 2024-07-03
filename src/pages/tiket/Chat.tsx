@@ -26,6 +26,7 @@ export function ChatType({
   setUrls,
   loadingClose,
   handleSubmitClose,
+  formClose,
 }: {
   data: DataTiketType
   form: UseFormReturn
@@ -38,6 +39,7 @@ export function ChatType({
   handleUploadFoto: (file: File) => Promise<void>
   handleSubmitClose: () => Promise<void>
   loadingClose: boolean
+  formClose: UseFormReturn
 }) {
   useEffect(() => {
     if (dir && dir.length > 0) {
@@ -64,138 +66,111 @@ export function ChatType({
         chat={data?.chat}
         nama={`${data?.ticket?.nama_depan} ${data?.ticket?.nama_belakang}`}
       />
-      {/* {data?.chat?.length > 0 && (
-        <div className="flex flex-col gap-24">
-          {data?.chat.map((item, idx) => (
-            <div
-              className={clsx('flex flex-1', {
-                'justify-end': item?.jenis_chat === 'UMUM',
-              })}
-              key={idx}
+
+      <div className="flex w-full gap-32">
+        {data?.ticket?.status !== 2 && (
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleChat)}
+              className="flex h-full w-full flex-1 gap-24 phones:flex-col"
             >
-              <div
-                className={clsx(
-                  'w flex w-2/3 flex-col gap-24  rounded-2xl border border-[#9C9C9C] p-16',
-                  {
-                    'bg-[#D2E0F7]': item?.jenis_chat === 'UMUM',
-                  },
-                )}
-              >
-                <p style={{ lineHeight: '130%' }}>{item?.isi}</p>
-                {item?.lampiran?.length > 0 && (
-                  <div className="flex flex-wrap gap-24">
-                    {item?.lampiran?.map((list, id) => (
-                      <Link to={list?.dokumen} target="_blank" key={id}>
-                        <img
-                          src={list?.dokumen}
-                          alt={list?.id}
-                          loading="lazy"
-                          className="h-[8rem] w-[10rem]"
-                        />
-                      </Link>
-                    ))}
-                  </div>
-                )}
-                <p className="text-right">
-                  {dayjs(item?.tanggal).locale('id').format('HH:mm')}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      )} */}
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(handleChat)}
-          className="flex w-full gap-24 phones:flex-col"
-        >
-          <div className="flex flex-1 items-center gap-24">
-            <FormField
-              name="berkas"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem className="flex flex-col space-y-2">
-                  <FormControl>
-                    <div>
-                      <Input
-                        className="-z-[1] h-[0.1px] w-[0.1px] overflow-hidden opacity-0"
-                        {...field}
-                        id="berkas"
-                        type="file"
-                        value={''}
-                        disabled={isLoadingUpload || loadingFile}
-                        placeholder="Lampiran"
-                        onChange={(e) => {
-                          if (e.target.files[0].size > 5 * 1000000) {
-                            return toast.error(
-                              `File terlalu besar. Maksimal 5 MB`,
-                              {
-                                position: 'bottom-right',
-                                autoClose: 5000,
-                                hideProgressBar: false,
-                                closeOnClick: true,
-                                pauseOnHover: true,
-                                draggable: true,
-                                progress: undefined,
-                                theme: 'light',
-                                transition: Bounce,
-                              },
-                            )
-                          } else {
-                            if (e.target.files[0] != null) {
-                              handleUploadFoto(e.target.files[0])
-                            }
-                          }
-                        }}
-                      />
-                      <div className="flex gap-32 phones:flex-col">
-                        <label
-                          className="flex items-center gap-12"
-                          htmlFor="berkas"
-                        >
-                          <div className="rounded-2xl bg-[#1B2F69] p-12 text-white hover:cursor-pointer hover:bg-opacity-80">
-                            {loadingFile ? (
-                              <span className="animate-spin duration-300">
-                                <Loader2 size={16} />
-                              </span>
-                            ) : (
-                              <Paperclip size={16} />
-                            )}
+              <div className="flex h-full flex-1 items-center gap-24">
+                <FormField
+                  name="berkas"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col space-y-2">
+                      <FormControl>
+                        <div>
+                          <Input
+                            className="-z-[1] h-[0.1px] w-[0.1px] overflow-hidden opacity-0"
+                            {...field}
+                            id="berkas"
+                            type="file"
+                            value={''}
+                            disabled={isLoadingUpload || loadingFile}
+                            placeholder="Lampiran"
+                            onChange={(e) => {
+                              if (e.target.files[0].size > 5 * 1000000) {
+                                return toast.error(
+                                  `File terlalu besar. Maksimal 5 MB`,
+                                  {
+                                    position: 'bottom-right',
+                                    autoClose: 5000,
+                                    hideProgressBar: false,
+                                    closeOnClick: true,
+                                    pauseOnHover: true,
+                                    draggable: true,
+                                    progress: undefined,
+                                    theme: 'light',
+                                    transition: Bounce,
+                                  },
+                                )
+                              } else {
+                                if (e.target.files[0] != null) {
+                                  handleUploadFoto(e.target.files[0])
+                                }
+                              }
+                            }}
+                          />
+                          <div className="flex gap-32 phones:flex-col">
+                            <label
+                              className="flex items-center gap-12"
+                              htmlFor="berkas"
+                            >
+                              <div className="rounded-2xl bg-[#1B2F69] p-12 text-white hover:cursor-pointer hover:bg-opacity-80">
+                                {loadingFile ? (
+                                  <span className="animate-spin duration-300">
+                                    <Loader2 size={16} />
+                                  </span>
+                                ) : (
+                                  <Paperclip size={16} />
+                                )}
+                              </div>
+                            </label>
                           </div>
-                        </label>
-                      </div>
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormLabelInput
-              form={form}
-              name="isi"
-              placeholder="Ketikka pesan anda"
-              type="text"
-              className="w-full"
-            />
-          </div>
-          <div className="flex items-center gap-24">
-            <button
-              type="submit"
-              className="rounded-2xl bg-[#1B2F69] px-32 py-16 text-white hover:bg-opacity-80 phones:w-full"
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormLabelInput
+                  form={form}
+                  name="isi"
+                  placeholder="Ketikka pesan anda"
+                  type="text"
+                  className="w-full"
+                />
+              </div>
+              <div className="flex items-center gap-24">
+                <button
+                  type="submit"
+                  className="rounded-2xl bg-[#1B2F69] px-32 py-16 text-white hover:bg-opacity-80 phones:w-full"
+                >
+                  Kirim
+                </button>
+              </div>
+            </form>
+          </Form>
+        )}
+        {data?.ticket?.status !== 2 && (
+          <Form {...formClose}>
+            <form
+              onSubmit={formClose.handleSubmit(handleSubmitClose)}
+              className="flex h-full gap-24 phones:flex-col"
             >
-              Kirim
-            </button>
-            <button
-              type="button"
-              disabled={loadingClose || data?.ticket?.status === 2}
-              onClick={handleSubmitClose}
-              className={`${data?.ticket?.status === 2 ? 'cursor-not-allowed bg-opacity-50' : 'hover:bg-opacity-80'} text-nowrap rounded-2xl bg-rose-800 px-32 py-16 text-white  phones:w-full`}
-            >
-              Tutup Tiket
-            </button>
-          </div>
-        </form>
-      </Form>
+              <button
+                type="submit"
+                disabled={loadingClose || data?.ticket?.status === 2}
+                className={`${data?.ticket?.status === 2 ? 'cursor-not-allowed bg-opacity-50' : 'hover:bg-opacity-80'} text-nowrap rounded-2xl bg-rose-800 px-32 py-16 text-white  phones:w-full`}
+              >
+                Tutup Tiket
+              </button>
+            </form>
+          </Form>
+        )}
+      </div>
       <div className="flex w-full flex-wrap items-start gap-32 whitespace-nowrap phones:w-full">
         {dir &&
           dir.length > 0 &&

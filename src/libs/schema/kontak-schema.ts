@@ -48,3 +48,7 @@ export const ChatSchema = zod.object({
     .nullable()
     .nullish(),
 })
+
+export const CloseSchema = zod.object({
+  id: zod.string().nullable().nullish().optional(),
+})

@@ -18,7 +18,7 @@ export function ChatHistory({
   // )?.id
 
   return (
-    <div className="flex flex-col gap-32">
+    <div className="flex flex-1 flex-col gap-32">
       {chat?.map((item, idx) => (
         <div className={`flex w-full flex-col gap-24`} key={idx}>
           {/* {item?.jenis_chat !== 'ADMIN' &&

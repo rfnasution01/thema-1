@@ -1,7 +1,11 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
-import { ChatSchema, InputToken } from '@/libs/schema/kontak-schema'
+import {
+  ChatSchema,
+  CloseSchema,
+  InputToken,
+} from '@/libs/schema/kontak-schema'
 import { useEffect, useState } from 'react'
 import { Bounce, ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -47,19 +51,29 @@ export default function Tiket() {
     defaultValues: {},
   })
 
+  const formClose = useForm<zod.infer<typeof CloseSchema>>({
+    resolver: zodResolver(CloseSchema),
+    defaultValues: {},
+  })
+
   const form = useForm<zod.infer<typeof InputToken>>({
     resolver: zodResolver(InputToken),
     defaultValues: {},
   })
 
+  // --- Submit Token ---
   const [handleSubmitToken, { isSuccess, isError, error }] =
     useFindKodeMutation()
 
   const handleTokenSubmit = async () => {
     const values = form.getValues()
 
+    const body = {
+      kode_tiket: values?.token,
+    }
+
     try {
-      const res = await handleSubmitToken({ kode_tiket: values?.token })
+      const res = await handleSubmitToken({ body: body })
       // setKodeTiket(values?.token)
       console.log(!res?.error)
 
@@ -324,6 +338,7 @@ export default function Tiket() {
                 loadingFile={loadingFile}
                 handleUploadFoto={handleUploadFoto}
                 setUrls={setUrls}
+                formClose={formClose}
               />
             ) : (
               <div className="flex w-full items-center justify-center">
