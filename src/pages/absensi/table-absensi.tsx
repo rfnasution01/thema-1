@@ -137,9 +137,9 @@ export function TableAbsensi({
                     )}
                   </td>
                   <td className="flex justify-center px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
-                    {list?.gambar_in ? (
+                    {list?.gambar_out ? (
                       <img
-                        src={list?.gambar_in}
+                        src={list?.gambar_out}
                         alt={list?.nama}
                         loading="lazy"
                         className="h-[10rem] w-[10rem] rounded-2xl object-cover"

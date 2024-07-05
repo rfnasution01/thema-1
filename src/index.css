@@ -135,6 +135,13 @@
 .article-content ol {
   margin-bottom: 20px;
   padding-left: 20px;
+  list-style-type: decimal;
+}
+
+.article-content ul {
+  margin-bottom: 20px;
+  padding-left: 20px;
+  list-style-type: disc;
 }
 
 .article-content li {
