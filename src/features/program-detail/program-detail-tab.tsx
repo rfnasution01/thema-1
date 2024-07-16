@@ -70,7 +70,11 @@ export function ProgramDetailTab({
                   setTab(item?.id)
                 }}
               >
-                <img src={item?.photo} alt={item?.judul} className="w-[3rem]" />
+                <img
+                  src={item?.photo}
+                  alt={item?.judul}
+                  className="w-[3rem] rounded-lg"
+                />
                 {item?.judul}
               </div>
             ))}

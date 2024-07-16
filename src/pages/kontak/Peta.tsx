@@ -1,6 +1,9 @@
 import { IdentitasType } from '@/libs/types/beranda-type'
 import { MapContainer, Marker, TileLayer } from 'react-leaflet'
 
+import L from 'leaflet'
+const icon = L.icon({ iconUrl: '/images/marker-icon.png' })
+
 export function Peta({ identitas }: { identitas: IdentitasType }) {
   return (
     <MapContainer
@@ -11,6 +14,7 @@ export function Peta({ identitas }: { identitas: IdentitasType }) {
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       <Marker
         position={[Number(identitas?.latitude), Number(identitas?.longitude)]}
+        icon={icon}
       ></Marker>
     </MapContainer>
   )

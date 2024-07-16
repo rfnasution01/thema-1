@@ -13,7 +13,7 @@ export function ProfilSasaran({
         <img
           src={profil?.profil?.[3]?.gambar ?? '/img/identitas.png'}
           alt="tujuan"
-          className="h-[40rem] w-full rounded-lg object-cover"
+          className="w-full rounded-3xl object-cover phones:h-[40rem]"
           loading="lazy"
         />
       </div>

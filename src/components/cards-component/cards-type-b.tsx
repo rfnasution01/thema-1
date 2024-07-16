@@ -51,7 +51,7 @@ export function CardTypeB({
                   <img
                     src={item?.photo}
                     alt={item?.judul}
-                    className="h-[16rem] w-[16rem]  object-cover"
+                    className="h-[16rem] w-[16rem] rounded-3xl  object-cover"
                     loading="lazy"
                   />
                 </div>

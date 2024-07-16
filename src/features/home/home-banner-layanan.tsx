@@ -65,7 +65,7 @@ export function HomeBannerLayanan({ color }: { color: string }) {
                     <img
                       src={item?.icon}
                       alt={item.keterangan}
-                      className="h-[3rem] w-[3rem] object-cover"
+                      className="h-[3rem] w-[3rem] rounded-lg object-cover"
                     />
                     <p>{item?.nama_layanan}</p>
                   </Link>

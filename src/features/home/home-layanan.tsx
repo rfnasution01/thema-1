@@ -65,11 +65,11 @@ export function HomeLayanan({ color }: { color: string }) {
                 className={`flex h-[35vh] w-[15%] flex-shrink-0 flex-col items-center justify-center gap-16 rounded-2xl border ${bgPrimary100(color)} p-32 text-center shadow hover:shadow-xl phones:w-3/5`}
                 key={idx}
               >
-                <div className="h-[16rem] w-[16rem] transition-transform hover:-translate-y-24 hover:cursor-pointer">
+                <div className="h-full w-full transition-transform hover:-translate-y-24 hover:cursor-pointer">
                   <img
                     src={item?.icon}
                     alt={item?.nama_layanan}
-                    className="h-full w-full rounded-lg object-cover"
+                    className="h-full w-full rounded-2xl object-cover"
                     loading="lazy"
                   />
                 </div>

@@ -41,11 +41,11 @@ export function HalamanDetail({
           <>
             <p className="font-roboto text-[5rem]">{judul}</p>
             {photo && (
-              <div className="h-[50vh] w-full">
+              <div className="h-full w-full">
                 <img
                   src={photo}
                   alt={judul}
-                  className="h-full w-full"
+                  className="h-full w-full rounded-3xl object-cover filter"
                   loading="lazy"
                 />
               </div>

@@ -1,4 +1,5 @@
 import { bgPrimary400 } from '@/libs/helpers/format-color'
+import { Link } from 'react-router-dom'
 
 export function RootFooterKontak({ color }: { color: string }) {
   return (
@@ -9,12 +10,9 @@ export function RootFooterKontak({ color }: { color: string }) {
         agar kami dapat memberikan layanan terbaik kepada anda
       </p>
       <div className="flex">
-        <button
-          type="button"
-          className={`${bgPrimary400(color)} rounded-2xl p-12`}
-        >
+        <Link to="kontak" className={`${bgPrimary400(color)} rounded-2xl p-12`}>
           Kontak
-        </button>
+        </Link>
       </div>
     </div>
   )
