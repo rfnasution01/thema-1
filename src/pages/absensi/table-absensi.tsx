@@ -1,14 +1,17 @@
-import { Form } from '@/components/Form'
-import { FormLabelInput } from '@/components/input'
-import { SingleSkeleton } from '@/components/skeleton-component'
-import { PresensiType } from '@/libs/types/absensi-tyoe'
-import clsx from 'clsx'
-import dayjs from 'dayjs'
-import { ChevronLeft } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import Slider from 'react-slick'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 import { UseFormReturn } from 'react-hook-form'
 import { useInView } from 'react-intersection-observer'
+import { Form } from '@/components/Form'
 import { Link } from 'react-router-dom'
+import { ChevronLeft } from 'lucide-react'
+import { FormLabelInput } from '@/components/input'
+import { SingleSkeleton } from '@/components/skeleton-component'
+import clsx from 'clsx'
+import dayjs from 'dayjs'
+import { PresensiType } from '@/libs/types/absensi-tyoe'
 
 export function TableAbsensi({
   item,
@@ -33,6 +36,17 @@ export function TableAbsensi({
       }, 1000) // Adjust the delay as needed
     }
   }, [inView])
+
+  const settings = {
+    infinite: true,
+    speed: 500,
+    slidesToShow: 10,
+    slidesToScroll: 1,
+    vertical: true,
+    verticalSwiping: true,
+    autoplay: true,
+    autoplaySpeed: 2000,
+  }
 
   return (
     <div
@@ -67,7 +81,7 @@ export function TableAbsensi({
         <SingleSkeleton height="h-full" />
       ) : (
         <div className="h-full flex-1 overflow-hidden">
-          <table className="rounded-3x h-full w-full flex-1 border-collapse bg-[#fcfcfc] text-[2rem]">
+          <table className="rounded-3x w-full flex-1 border-collapse bg-[#fcfcfc] text-[2rem]">
             <thead className="align-top text-[2rem] leading-medium">
               <tr>
                 <th className="sticky top-0 z-10 w-[5%] bg-[#1835B3] px-24 py-16 text-center align-middle text-white">
@@ -90,86 +104,97 @@ export function TableAbsensi({
                 </th>
               </tr>
             </thead>
-            <tbody className="h-full animate-marquee-up">
-              {item?.map((list, idx) => (
-                <tr
-                  key={idx}
-                  className={clsx(
-                    'text-white transition-all ease-in hover:cursor-pointer',
-                    {
-                      'bg-[#1DA1F2]': idx % 2 === 0,
-                      'bg-[#0099FF]': idx % 2 === 1,
-                    },
-                  )}
-                >
-                  <td className="px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
-                    {idx + 1}
-                  </td>
-                  <td className="px-24 py-12 text-center align-middle font-sans text-[2.4rem] font-bold leading-medium">
-                    {list?.nama}
-                  </td>
-                  <td className="flex justify-center px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
-                    {list?.gambar_in ? (
-                      <img
-                        src={list?.gambar_in}
-                        alt={list?.nama}
-                        loading="lazy"
-                        className="h-[10rem] w-[10rem] rounded-2xl object-cover"
-                      />
-                    ) : (
-                      'Tidak Ada'
-                    )}
-                  </td>
-                  <td
-                    className={clsx(
-                      'px-24 py-12 text-center align-middle font-sans text-[2rem] font-bold leading-medium',
-                    )}
-                  >
-                    {list?.in_at ? (
-                      <div className="flex flex-col gap-4">
-                        <p>{list?.status_in}</p>
-                        <p>
-                          {dayjs(list?.in_at)?.locale('id').format('HH:mm')}
-                        </p>
-                      </div>
-                    ) : (
-                      list?.status_in
-                    )}
-                  </td>
-                  <td className="flex justify-center px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
-                    {list?.gambar_out ? (
-                      <img
-                        src={list?.gambar_out}
-                        alt={list?.nama}
-                        loading="lazy"
-                        className="h-[10rem] w-[10rem] rounded-2xl object-cover"
-                      />
-                    ) : (
-                      'Tidak Ada'
-                    )}
-                  </td>
-                  <td
-                    className={clsx(
-                      'px-24 py-12 text-center align-middle font-sans text-[2rem] font-bold leading-medium',
-                    )}
-                  >
-                    {list?.status_in === 'Alpa' ? (
-                      'Alpa'
-                    ) : (
-                      <div className="flex flex-col gap-4">
-                        <p>{list?.status_out ?? 'Ontime'}</p>
-                        {!list?.status_out && (
-                          <p>
-                            {dayjs(list?.out_at).locale('id').format('HH:mm')}
-                          </p>
-                        )}
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
           </table>
+          <Slider {...settings}>
+            {item?.map((list, idx) => (
+              <div key={idx}>
+                <table className="rounded-3x w-full flex-1 border-collapse bg-[#fcfcfc] text-[2rem]">
+                  <tbody className="h-full">
+                    <tr
+                      className={clsx(
+                        'text-white transition-all ease-in hover:cursor-pointer',
+                        {
+                          'bg-[#1DA1F2]': idx % 2 === 0,
+                          'bg-[#0099FF]': idx % 2 === 1,
+                        },
+                      )}
+                    >
+                      <td className="w-[5%] px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
+                        {idx + 1}
+                      </td>
+                      <td className="w-[35%] px-24 py-12 text-center align-middle font-sans text-[2.4rem] font-bold leading-medium">
+                        {list?.nama}
+                      </td>
+                      <td className="w-[15%] px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
+                        <div className="flex items-center justify-center">
+                          {list?.gambar_in ? (
+                            <img
+                              src={list?.gambar_in}
+                              alt={list?.nama}
+                              loading="lazy"
+                              className="h-[10rem] w-[10rem] rounded-2xl object-cover"
+                            />
+                          ) : (
+                            'Tidak Ada'
+                          )}
+                        </div>
+                      </td>
+                      <td
+                        className={clsx(
+                          'w-[15%] px-24 py-12 text-center align-middle font-sans text-[2rem] font-bold leading-medium',
+                        )}
+                      >
+                        {list?.in_at ? (
+                          <div className="flex flex-col gap-4">
+                            <p>{list?.status_in}</p>
+                            <p>
+                              {dayjs(list?.in_at)?.locale('id').format('HH:mm')}
+                            </p>
+                          </div>
+                        ) : (
+                          list?.status_in
+                        )}
+                      </td>
+                      <td className="w-[15%] px-24 py-12 text-center align-middle font-sans text-[2rem] leading-medium">
+                        <div className="flex items-center justify-center">
+                          {list?.gambar_out ? (
+                            <img
+                              src={list?.gambar_out}
+                              alt={list?.nama}
+                              loading="lazy"
+                              className="h-[10rem] w-[10rem] rounded-2xl object-cover"
+                            />
+                          ) : (
+                            'Tidak Ada'
+                          )}
+                        </div>
+                      </td>
+                      <td
+                        className={clsx(
+                          'w-[15%] px-24 py-12 text-center align-middle font-sans text-[2rem] font-bold leading-medium',
+                        )}
+                      >
+                        {list?.status_in === 'Alpa' ? (
+                          'Alpa'
+                        ) : (
+                          <div className="flex flex-col gap-4">
+                            <p>{list?.status_out ?? 'Ontime'}</p>
+                            {!list?.status_out && (
+                              <p>
+                                {dayjs(list?.out_at)
+                                  .locale('id')
+                                  .format('HH:mm')}
+                              </p>
+                            )}
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            ))}
+          </Slider>
         </div>
       )}
     </div>
